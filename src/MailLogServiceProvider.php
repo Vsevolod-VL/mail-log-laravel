@@ -7,6 +7,7 @@ namespace Phattarachai\MailLogLaravel;
 use Illuminate\Mail\Events\MessageSending;
 use Illuminate\Mail\Events\MessageSent;
 use Illuminate\Queue\Events\JobFailed;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 use Phattarachai\MailLogLaravel\Console\InstallCommand;
@@ -38,6 +39,7 @@ class MailLogServiceProvider extends ServiceProvider
 
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'mail-log');
+        Blade::anonymousComponentPath(__DIR__.'/../resources/views/components', 'mail-log');
 
         if (config('mail-log.ui.path') !== null) {
             $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
