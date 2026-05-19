@@ -68,7 +68,7 @@ it('registers the package publish tags', function () {
 });
 
 it('exposes the LogOutgoingMail listener handlers', function () {
-    $listener = new LogOutgoingMail();
+    $listener = app(LogOutgoingMail::class);
 
     expect(method_exists($listener, 'handleSending'))->toBeTrue()
         ->and(method_exists($listener, 'handleSent'))->toBeTrue()
