@@ -46,6 +46,15 @@ return [
         'auth_default' => 'debug-only',
         'page_size' => (int) env('MAIL_LOG_UI_PAGE_SIZE', 25),
         'brand' => env('MAIL_LOG_UI_BRAND', 'Mail Log'),
+
+        // Link back to the host application (rendered top-left of the header).
+        //   null / unset → defaults to url('/') (host app home).
+        //   false        → hides the link entirely.
+        //   string       → uses that URL verbatim.
+        'back_link' => [
+            'url' => env('MAIL_LOG_UI_BACK_URL'),
+            'label' => env('MAIL_LOG_UI_BACK_LABEL', 'Back to app'),
+        ],
     ],
 
     'morph_alias' => env('MAIL_LOG_MORPH_ALIAS', 'mail_log_group'),

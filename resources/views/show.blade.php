@@ -11,7 +11,7 @@
             <a href="{{ route('mail-log.index') }}" class="text-zinc-500 hover:text-zinc-900">{{ config('mail-log.ui.brand', 'Mail Log') }}</a>
             <span class="text-zinc-300">/</span>
             <span class="truncate font-medium">{{ $group->subject ?: '(no subject)' }}</span>
-            <span class="ml-2 inline-flex items-center rounded-md bg-zinc-100 px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-wider text-zinc-500" title="This page represents one group; sends below are its events.">group</span>
+            <span class="ml-2 inline-flex items-center rounded-md bg-zinc-100 px-1.5 py-0.5 font-mono text-[10px] uppercase text-zinc-500" title="This page represents one group; sends below are its events.">group</span>
 
             <div class="ml-auto flex items-center gap-2">
                 <form method="POST" action="{{ route('mail-log.destroy', $group) }}" onsubmit="return confirm('Delete this group and all its events?')">
@@ -38,13 +38,13 @@
 
             <div>
                 <div class="mb-2 flex items-center justify-between gap-2">
-                    <h3 class="text-[11px] font-semibold uppercase tracking-wide text-zinc-500">Sends ({{ $events->total() }})</h3>
+                    <h3 class="text-[11px] font-semibold uppercase text-zinc-500">Sends ({{ $events->total() }})</h3>
                 </div>
 
                 <div x-data="sendsTable()" class="rounded-lg border border-zinc-200 bg-white">
                     <table class="w-full text-sm">
                         <thead>
-                            <tr class="border-b border-zinc-100 text-left text-[11px] font-medium uppercase tracking-wide text-zinc-500">
+                            <tr class="border-b border-zinc-100 text-left text-[11px] font-medium uppercase text-zinc-500">
                                 <th class="px-3 py-2 font-medium">Status</th>
                                 <th class="px-3 py-2 font-medium">Recipient</th>
                                 <th class="px-3 py-2 font-medium">Sent</th>
@@ -71,7 +71,7 @@
         <aside class="space-y-4">
             <div class="rounded-lg border border-zinc-200 bg-white">
                 <div class="border-b border-zinc-100 px-4 py-2.5">
-                    <div class="text-[11px] uppercase tracking-wide text-zinc-500">Metadata</div>
+                    <div class="text-[11px] uppercase text-zinc-500">Metadata</div>
                 </div>
                 <dl class="divide-y divide-zinc-100 text-sm">
                     <div class="grid grid-cols-3 gap-2 px-4 py-2">

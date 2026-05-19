@@ -15,7 +15,7 @@
 @endphp
 
 <tr class="hover:bg-zinc-50">
-    <td class="py-2.5 align-top">
+    <td class="whitespace-nowrap py-2.5 align-top">
         <a href="{{ route('mail-log.show', $group) }}" class="block font-mono">
             <div class="text-xs text-zinc-700">{{ MailLog::dt($group->updated_at) }}</div>
             @if ($multi)
