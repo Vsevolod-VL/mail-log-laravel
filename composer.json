@@ -1,0 +1,64 @@
+{
+    "name": "phattarachai/mail-log-laravel",
+    "description": "Self-hosted outbound mail logger for Laravel — captures Mail + Notification sends, groups by Mailable class + model, ships its own Tailwind UI.",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "laravel",
+        "mail",
+        "logging",
+        "observability"
+    ],
+    "authors": [
+        {
+            "name": "Phattarachai Chaimongkol",
+            "email": "pc@phattarachai.dev"
+        }
+    ],
+    "require": {
+        "php": "^8.4",
+        "illuminate/console": "^12.0 || ^13.0",
+        "illuminate/contracts": "^12.0 || ^13.0",
+        "illuminate/database": "^12.0 || ^13.0",
+        "illuminate/http": "^12.0 || ^13.0",
+        "illuminate/mail": "^12.0 || ^13.0",
+        "illuminate/queue": "^12.0 || ^13.0",
+        "illuminate/routing": "^12.0 || ^13.0",
+        "illuminate/support": "^12.0 || ^13.0",
+        "illuminate/view": "^12.0 || ^13.0",
+        "spatie/laravel-medialibrary": "^11.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^10.0",
+        "pestphp/pest": "^4.0",
+        "pestphp/pest-plugin-laravel": "^4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Phattarachai\\MailLogLaravel\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Phattarachai\\MailLogLaravel\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/pest"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Phattarachai\\MailLogLaravel\\MailLogServiceProvider"
+            ]
+        }
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
