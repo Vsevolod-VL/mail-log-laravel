@@ -35,7 +35,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Phattarachai\\MailLogLaravel\\": "src/"
+            "Phattarachai\\MailLogLaravel\\": "src/",
+            "Phattarachai\\MailLogLaravel\\Database\\Factories\\": "database/factories/"
         }
     },
     "autoload-dev": {
