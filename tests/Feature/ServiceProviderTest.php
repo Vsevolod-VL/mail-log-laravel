@@ -56,7 +56,7 @@ it('falls back to APP_DEBUG when no auth callback is registered', function () {
 });
 
 it('exposes a mail-log:install Artisan command', function () {
-    $this->artisan('mail-log:install')->assertSuccessful();
+    $this->artisan('mail-log:install', ['--dry-run' => true])->assertSuccessful();
 });
 
 it('registers the package publish tags', function () {
