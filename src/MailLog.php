@@ -4,12 +4,43 @@ declare(strict_types=1);
 
 namespace Phattarachai\MailLogLaravel;
 
+use Carbon\CarbonInterface;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\HtmlString;
 
 class MailLog
 {
+    /**
+     * Thai month abbreviations indexed by month number (1-12).
+     *
+     * @var array<int, string>
+     */
+    private const THAI_MONTHS = [
+        1 => 'ม.ค.', 2 => 'ก.พ.', 3 => 'มี.ค.', 4 => 'เม.ย.',
+        5 => 'พ.ค.', 6 => 'มิ.ย.', 7 => 'ก.ค.', 8 => 'ส.ค.',
+        9 => 'ก.ย.', 10 => 'ต.ค.', 11 => 'พ.ย.', 12 => 'ธ.ค.',
+    ];
+
+    /**
+     * Format a date as `19 พ.ค. 67 · 14:34` (day + Thai abbrev + 2-digit Buddhist
+     * year + 24-hour time). Hard-coded to Thai for v0.1 (see design-notes.md).
+     */
+    public static function dt(?CarbonInterface $date): string
+    {
+        if ($date === null) {
+            return '—';
+        }
+
+        return sprintf(
+            '%d %s %d · %s',
+            $date->day,
+            self::THAI_MONTHS[$date->month] ?? $date->shortMonthName,
+            ($date->year + 543) % 100,
+            $date->format('H:i'),
+        );
+    }
+
     /**
      * Host-registered authorization gate. When null, falls back to APP_DEBUG.
      *
