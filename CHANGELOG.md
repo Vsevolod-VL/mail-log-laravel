@@ -2,6 +2,21 @@
 
 All notable changes to `phattarachai/mail-log-laravel` are documented here. Format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versioning is [SemVer](https://semver.org/).
 
+## 0.2.0 — 2026-05-19
+
+### Added
+
+- **Back-to-app link in the header.** A new `mail-log.ui.back_link` config (`url` + `label`) renders a `← Back to app` link on the far left of the dashboard header. Defaults to `url('/')` so it works out of the box. Override via `MAIL_LOG_UI_BACK_URL` (string for a custom URL, `false` to hide) and `MAIL_LOG_UI_BACK_LABEL` (default `"Back to app"`).
+
+### Changed
+
+- **Index page typography.** Dropped `tracking-wide` / `tracking-wider` from every uppercase mini-label across `index.blade.php`, `show.blade.php`, `components/{group-row, stats-strip, recipients-accordion, attachments-list}.blade.php`. Labels stay uppercase but no longer carry expanded letter-spacing.
+- **`Last sent` column no-wrap.** The Thai date format (`19 พ.ค. 69 · 15:07`) was wrapping onto three lines in narrow viewports; the `<th>` and `<td>` now carry `whitespace-nowrap`.
+
+### Compatibility
+
+- No schema, listener, or config-key removals. Drop-in upgrade from 0.1.x — no migration, no `mail-log:install` rerun required.
+
 ## 0.1.0 — 2026-05-19
 
 Initial release.
