@@ -215,6 +215,20 @@ it('blocks all UI routes when MailLog::auth returns false', function () {
     $this->post(route('mail-log.test-send'), ['email' => 'x@example.com'])->assertForbidden();
 });
 
+it('renders the header back-link when back_link config has a url but no label key', function () {
+    // Installs published before 0.2.0 carry a back_link array with only `url`
+    // (the `label` key was added later). The header must not blow up with an
+    // "Undefined array key label" fatal — it should fall back to "Back".
+    config()->set('mail-log.ui.back_link', ['url' => 'https://app.example.com']);
+
+    MailLogGroup::factory()->create();
+
+    $this->get(route('mail-log.index'))
+        ->assertOk()
+        ->assertSee('https://app.example.com')
+        ->assertSee('Back');
+});
+
 it('inlines the dist CSS + JS bundles via the asset helpers', function () {
     $cssHtml = (string) MailLog::css();
     $jsHtml = (string) MailLog::js();
