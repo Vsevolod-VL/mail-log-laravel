@@ -2,6 +2,16 @@
 
 All notable changes to `phattarachai/mail-log-laravel` are documented here. Format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versioning is [SemVer](https://semver.org/).
 
+## 0.2.1 — 2026-06-22
+
+### Fixed
+
+- **`Undefined array key "label"` fatal on the dashboard header.** When `mail-log.ui.back_link` was an array carrying only a `url` key (e.g. an install whose published `config/mail-log.php` predates the 0.2.0 `label` addition, or one that overrode `back_link` with just a URL), the header blew up with a fatal `ViewException` under production error handling. `layout.blade.php` now reads the `label` key defensively (`$mailLogBackLink['label'] ?? null`) and guards the `url` lookup against non-array values, falling back to `"Back"`.
+
+### Compatibility
+
+- View-only patch. No schema, config-key, or listener changes — drop-in upgrade from 0.2.0.
+
 ## 0.2.0 — 2026-05-19
 
 ### Added
