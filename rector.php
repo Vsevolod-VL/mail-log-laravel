@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
+use RectorLaravel\Rector\Class_\ModelCastsPropertyToCastsMethodRector;
+use RectorLaravel\Rector\ClassMethod\MigrateToSimplifiedAttributeRector;
 use RectorLaravel\Rector\FuncCall\AppToResolveRector;
 use RectorLaravel\Set\LaravelSetList;
 
@@ -23,9 +25,17 @@ return RectorConfig::configure()
         carbon: true,
     )
     ->withSets([
+        // Package targets ^12 || ^13 — keep the version-set ceiling at LARAVEL_120
+        // (v13 core renames could rewrite to L13-only classes and break L12 support).
         LaravelSetList::LARAVEL_120,
         LaravelSetList::LARAVEL_CODE_QUALITY,
+        LaravelSetList::LARAVEL_COLLECTION,
+        LaravelSetList::LARAVEL_TYPE_DECLARATIONS,
         LaravelSetList::LARAVEL_ELOQUENT_MAGIC_METHOD_TO_QUERY_BUILDER,
+    ])
+    ->withRules([
+        MigrateToSimplifiedAttributeRector::class,
+        ModelCastsPropertyToCastsMethodRector::class,
     ])
     ->withTypeCoverageLevel(0)
     ->withSkip([
