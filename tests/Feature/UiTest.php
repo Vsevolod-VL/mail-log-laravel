@@ -5,12 +5,13 @@ declare(strict_types=1);
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Storage;
 use Phattarachai\MailLogLaravel\Enums\MailLogStatus;
+use Phattarachai\MailLogLaravel\Mail\TestMail;
 use Phattarachai\MailLogLaravel\MailLog;
 use Phattarachai\MailLogLaravel\Models\MailLog as MailLogEvent;
 use Phattarachai\MailLogLaravel\Models\MailLogGroup;
 
-beforeEach(function () {
-    Relation::morphMap([], false);
+beforeEach(function (): void {
+    Relation::morphMap([], merge: false);
     MailLogGroup::registerMorphMap();
 
     config()->set('mail.default', 'array');
@@ -20,7 +21,7 @@ beforeEach(function () {
     MailLog::auth(fn () => true);
 });
 
-it('lists groups on the index with sent-count and recipient summary', function () {
+it('lists groups on the index with sent-count and recipient summary', function (): void {
     $group = MailLogGroup::factory()->create([
         'subject' => 'Order #1042 shipped',
         'sent_count' => 3,
@@ -43,7 +44,7 @@ it('lists groups on the index with sent-count and recipient summary', function (
         ->assertSee('+2 more');
 });
 
-it('filters the index by status', function () {
+it('filters the index by status', function (): void {
     MailLogGroup::factory()->create([
         'subject' => 'Sent A',
         'latest_status' => MailLogStatus::Sent,
@@ -62,7 +63,7 @@ it('filters the index by status', function () {
         ->assertDontSee('Sent A');
 });
 
-it('filters the index by has_failures', function () {
+it('filters the index by has_failures', function (): void {
     MailLogGroup::factory()->create([
         'subject' => 'Clean run',
         'sent_count' => 5,
@@ -82,7 +83,7 @@ it('filters the index by has_failures', function () {
         ->assertDontSee('Clean run');
 });
 
-it('filters the index by search across subject, mailable class, and recipients', function () {
+it('filters the index by search across subject, mailable class, and recipients', function (): void {
     $bySubject = MailLogGroup::factory()->create(['subject' => 'Daily digest', 'mailable_class' => 'App\\Mail\\Digest']);
     $byClass = MailLogGroup::factory()->create(['subject' => 'Welcome aboard', 'mailable_class' => 'App\\Mail\\OrderShipped']);
     $byRecipient = MailLogGroup::factory()->create(['subject' => 'Password reset', 'mailable_class' => 'App\\Mail\\PasswordReset']);
@@ -101,7 +102,7 @@ it('filters the index by search across subject, mailable class, and recipients',
         ->not->toContain('Daily digest');
 });
 
-it('shows the body preview iframe and sends table on the group detail page', function () {
+it('shows the body preview iframe and sends table on the group detail page', function (): void {
     $group = MailLogGroup::factory()->create([
         'subject' => 'Order #1042 shipped',
         'sent_count' => 2,
@@ -123,7 +124,7 @@ it('shows the body preview iframe and sends table on the group detail page', fun
         ->assertSeeText('bodyPreview');
 });
 
-it('returns event JSON via /events/{event}', function () {
+it('returns event JSON via /events/{event}', function (): void {
     $group = MailLogGroup::factory()->create();
     $event = MailLogEvent::factory()->for($group, 'group')->create([
         'to' => ['target@example.com'],
@@ -141,7 +142,7 @@ it('returns event JSON via /events/{event}', function () {
         ->assertJsonPath('seconds', 0.123);
 });
 
-it('404s when the event does not belong to the group', function () {
+it('404s when the event does not belong to the group', function (): void {
     $group = MailLogGroup::factory()->create();
     $other = MailLogGroup::factory()->create();
     $event = MailLogEvent::factory()->for($other, 'group')->create();
@@ -149,7 +150,7 @@ it('404s when the event does not belong to the group', function () {
     $this->get(route('mail-log.event', ['group' => $group, 'event' => $event]))->assertNotFound();
 });
 
-it('downloads an attachment via /attachments/{media}', function () {
+it('downloads an attachment via /attachments/{media}', function (): void {
     config()->set('mail-log.attachments.disk', 'public');
     Storage::fake('public');
 
@@ -167,7 +168,7 @@ it('downloads an attachment via /attachments/{media}', function () {
     expect($response->headers->get('content-disposition'))->toContain('invoice.pdf');
 });
 
-it('test-send dispatches a mail and creates a new TestMail group', function () {
+it('test-send dispatches a mail and creates a new TestMail group', function (): void {
     $response = $this
         ->from(route('mail-log.index'))
         ->post(route('mail-log.test-send'), [
@@ -178,20 +179,20 @@ it('test-send dispatches a mail and creates a new TestMail group', function () {
     $response->assertRedirect(route('mail-log.index'));
 
     $group = MailLogGroup::query()
-        ->where('mailable_class', \Phattarachai\MailLogLaravel\Mail\TestMail::class)
+        ->where('mailable_class', TestMail::class)
         ->firstOrFail();
 
     expect($group->sent_count)->toBe(1);
     expect(MailLogEvent::query()->where('group_id', $group->id)->count())->toBe(1);
 });
 
-it('test-send route 404s when test-send is disabled', function () {
-    config()->set('mail-log.test_send.enabled', false);
+it('test-send route 404s when test-send is disabled', function (): void {
+    config()->set('mail-log.test_send.enabled', value: false);
 
     $this->post(route('mail-log.test-send'), ['email' => 'x@example.com'])->assertNotFound();
 });
 
-it('deleting a group cascade-removes its events', function () {
+it('deleting a group cascade-removes its events', function (): void {
     $group = MailLogGroup::factory()->create();
     MailLogEvent::factory()->for($group, 'group')->count(3)->create();
 
@@ -204,7 +205,7 @@ it('deleting a group cascade-removes its events', function () {
         ->and(MailLogEvent::query()->where('group_id', $group->id)->count())->toBe(0);
 });
 
-it('blocks all UI routes when MailLog::auth returns false', function () {
+it('blocks all UI routes when MailLog::auth returns false', function (): void {
     MailLog::auth(fn () => false);
 
     $group = MailLogGroup::factory()->create();
@@ -215,7 +216,7 @@ it('blocks all UI routes when MailLog::auth returns false', function () {
     $this->post(route('mail-log.test-send'), ['email' => 'x@example.com'])->assertForbidden();
 });
 
-it('renders the header back-link when back_link config has a url but no label key', function () {
+it('renders the header back-link when back_link config has a url but no label key', function (): void {
     // Installs published before 0.2.0 carry a back_link array with only `url`
     // (the `label` key was added later). The header must not blow up with an
     // "Undefined array key label" fatal — it should fall back to "Back".
@@ -229,7 +230,7 @@ it('renders the header back-link when back_link config has a url but no label ke
         ->assertSee('Back');
 });
 
-it('inlines the dist CSS + JS bundles via the asset helpers', function () {
+it('inlines the dist CSS + JS bundles via the asset helpers', function (): void {
     $cssHtml = (string) MailLog::css();
     $jsHtml = (string) MailLog::js();
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Mail\Mailables\Headers;
@@ -15,8 +16,8 @@ use Phattarachai\MailLogLaravel\Enums\MailLogStatus;
 use Phattarachai\MailLogLaravel\Models\MailLog;
 use Phattarachai\MailLogLaravel\Models\MailLogGroup;
 
-beforeEach(function () {
-    Relation::morphMap([], false);
+beforeEach(function (): void {
+    Relation::morphMap([], merge: false);
     MailLogGroup::registerMorphMap();
 
     config()->set('mail.default', 'array');
@@ -24,7 +25,7 @@ beforeEach(function () {
     config()->set('mail.from', ['address' => 'app@example.com', 'name' => 'App']);
 });
 
-it('groups three sends of the same mailable + model into one group with three events', function () {
+it('groups three sends of the same mailable + model into one group with three events', function (): void {
     $order = MailLogGroup::factory()->create();
 
     Mail::to('a@example.com')->send(new ListenerOrderMail($order));
@@ -53,7 +54,7 @@ it('groups three sends of the same mailable + model into one group with three ev
     expect($recipients)->toBe(['a@example.com', 'b@example.com', 'c@example.com']);
 });
 
-it('creates separate groups for the same mailable bound to different models', function () {
+it('creates separate groups for the same mailable bound to different models', function (): void {
     $order1 = MailLogGroup::factory()->create();
     $order2 = MailLogGroup::factory()->create();
 
@@ -70,7 +71,7 @@ it('creates separate groups for the same mailable bound to different models', fu
     expect($modelIds)->toBe([(string) $order1->id, (string) $order2->id]);
 });
 
-it('handles two parallel sending events with the same fingerprint as one group + two events', function () {
+it('handles two parallel sending events with the same fingerprint as one group + two events', function (): void {
     $order = MailLogGroup::factory()->create();
 
     Mail::to('a@example.com')->send(new ListenerOrderMail($order));
@@ -82,7 +83,7 @@ it('handles two parallel sending events with the same fingerprint as one group +
         ->and($group->sent_count)->toBe(2);
 });
 
-it('stores attachments only on the first event in a group', function () {
+it('stores attachments only on the first event in a group', function (): void {
     config()->set('mail-log.attachments.disk', 'public');
     Storage::fake('public');
 
@@ -100,17 +101,17 @@ it('stores attachments only on the first event in a group', function () {
         ->and(MailLog::query()->where('group_id', $group->id)->count())->toBe(2);
 });
 
-it('skips logging entirely when the trait reports mailLogSkip = true', function () {
+it('skips logging entirely when the trait reports mailLogSkip = true', function (): void {
     $order = MailLogGroup::factory()->create();
 
     Mail::to('a@example.com')->send(new ListenerSkippedMail($order));
 
     expect(MailLogGroup::query()->where('id', '!=', $order->id)->count())->toBe(0)
-        ->and(MailLog::count())->toBe(0);
+        ->and(MailLog::query()->count())->toBe(0);
 });
 
-it('captures raw Mail::raw sends via the body-hash fallback path', function () {
-    Mail::raw('Hello from the raw path', function ($message) {
+it('captures raw Mail::raw sends via the body-hash fallback path', function (): void {
+    Mail::raw('Hello from the raw path', function ($message): void {
         $message->to('raw@example.com')->subject('Raw daily digest');
     });
 
@@ -131,11 +132,6 @@ class ListenerOrderMail extends Mailable
 
     public function __construct(public Model $order) {}
 
-    protected function mailLogModel(): ?Model
-    {
-        return $this->order;
-    }
-
     public function envelope(): Envelope
     {
         return new Envelope(subject: 'Order shipped');
@@ -150,6 +146,11 @@ class ListenerOrderMail extends Mailable
     {
         return $this->withMailLog(new Headers);
     }
+
+    protected function mailLogModel(): ?Model
+    {
+        return $this->order;
+    }
 }
 
 class ListenerOrderMailWithAttachment extends Mailable
@@ -157,11 +158,6 @@ class ListenerOrderMailWithAttachment extends Mailable
     use HasMailLog;
 
     public function __construct(public Model $order) {}
-
-    protected function mailLogModel(): ?Model
-    {
-        return $this->order;
-    }
 
     public function envelope(): Envelope
     {
@@ -176,7 +172,7 @@ class ListenerOrderMailWithAttachment extends Mailable
     public function attachments(): array
     {
         return [
-            \Illuminate\Mail\Mailables\Attachment::fromData(
+            Attachment::fromData(
                 fn () => 'invoice contents',
                 'invoice.pdf',
             )->withMime('application/pdf'),
@@ -187,6 +183,11 @@ class ListenerOrderMailWithAttachment extends Mailable
     {
         return $this->withMailLog(new Headers);
     }
+
+    protected function mailLogModel(): ?Model
+    {
+        return $this->order;
+    }
 }
 
 class ListenerSkippedMail extends Mailable
@@ -194,16 +195,6 @@ class ListenerSkippedMail extends Mailable
     use HasMailLog;
 
     public function __construct(public Model $order) {}
-
-    protected function mailLogModel(): ?Model
-    {
-        return $this->order;
-    }
-
-    protected function mailLogSkip(): bool
-    {
-        return true;
-    }
 
     public function envelope(): Envelope
     {
@@ -218,5 +209,15 @@ class ListenerSkippedMail extends Mailable
     public function headers(): Headers
     {
         return $this->withMailLog(new Headers);
+    }
+
+    protected function mailLogModel(): ?Model
+    {
+        return $this->order;
+    }
+
+    protected function mailLogSkip(): bool
+    {
+        return true;
     }
 }

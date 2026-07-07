@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Phattarachai\MailLogLaravel\Models;
 
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -16,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Override;
 use Phattarachai\MailLogLaravel\Database\Factories\MailLogGroupFactory;
 use Phattarachai\MailLogLaravel\Enums\MailLogStatus;
 use Spatie\MediaLibrary\HasMedia;
@@ -29,18 +29,10 @@ class MailLogGroup extends Model implements HasMedia
 
     protected $guarded = [];
 
+    #[Override]
     public function getTable(): string
     {
         return (string) config('mail-log.tables.groups', 'mail_log_groups');
-    }
-
-    protected function casts(): array
-    {
-        return [
-            'latest_status' => MailLogStatus::class,
-            'sent_count' => 'integer',
-            'failed_count' => 'integer',
-        ];
     }
 
     /**
@@ -150,6 +142,16 @@ class MailLogGroup extends Model implements HasMedia
         Relation::morphMap([
             (string) config('mail-log.morph_alias', 'mail_log_group') => static::class,
         ]);
+    }
+
+    #[Override]
+    protected function casts(): array
+    {
+        return [
+            'latest_status' => MailLogStatus::class,
+            'sent_count' => 'integer',
+            'failed_count' => 'integer',
+        ];
     }
 
     protected static function newFactory(): Factory

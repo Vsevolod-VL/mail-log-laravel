@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+use Illuminate\Support\Facades\Schema;
 
 beforeEach(function (): void {
     $this->envPath = base_path('.env');
@@ -56,8 +57,8 @@ it('publishes config + migrations + env keys + snippets on a fresh install', fun
     $files = (array) glob(database_path('migrations/*.php'));
     $names = array_map(fn ($f) => basename((string) $f), $files);
 
-    expect($names)->toContain(...array_filter($names, fn ($n) => str_contains($n, 'create_mail_log_groups_table')));
-    expect($names)->toContain(...array_filter($names, fn ($n) => str_contains($n, 'create_mail_logs_table')));
+    expect($names)->toContain(...array_filter($names, fn ($n) => str_contains((string) $n, 'create_mail_log_groups_table')));
+    expect($names)->toContain(...array_filter($names, fn ($n) => str_contains((string) $n, 'create_mail_logs_table')));
 });
 
 it('prints the AppServiceProvider auth gate + HasMailLog trait snippets', function (): void {
@@ -68,7 +69,7 @@ it('prints the AppServiceProvider auth gate + HasMailLog trait snippets', functi
         ->expectsOutputToContain('use Phattarachai\\MailLogLaravel\\Concerns\\HasMailLog;')
         ->expectsOutputToContain('protected function mailLogModel()')
         ->expectsOutputToContain('return $this->withMailLog(new Headers())')
-        ->expectsOutputToContain("model:prune")
+        ->expectsOutputToContain('model:prune')
         ->assertExitCode(0);
 });
 
@@ -114,7 +115,7 @@ it('skips the mail-log migration publish when one already exists', function (): 
 });
 
 it('publishes the Spatie media migration when the media table is missing', function (): void {
-    \Illuminate\Support\Facades\Schema::dropIfExists('media');
+    Schema::dropIfExists('media');
 
     $this->artisan('mail-log:install')
         ->expectsConfirmation('Run `php artisan migrate` now?', 'no')

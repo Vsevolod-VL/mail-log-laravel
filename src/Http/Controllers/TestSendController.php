@@ -13,7 +13,7 @@ class TestSendController
 {
     public function store(Request $request): RedirectResponse
     {
-        abort_unless((bool) config('mail-log.test_send.enabled', true), 404);
+        abort_unless((bool) config('mail-log.test_send.enabled', default: true), 404);
 
         $maxBytes = (int) config('mail-log.attachments.max_bytes_each', 10 * 1024 * 1024);
         $maxKilobytes = max(1, (int) floor($maxBytes / 1024));
@@ -42,8 +42,7 @@ class TestSendController
 
         Mail::to($validated['email'])->send($mailable);
 
-        return redirect()
-            ->route('mail-log.index')
+        return to_route('mail-log.index')
             ->with('mail-log:flash', 'ส่งอีเมลทดสอบไปยัง '.$validated['email'].' แล้ว');
     }
 }

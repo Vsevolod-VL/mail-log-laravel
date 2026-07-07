@@ -35,6 +35,58 @@ use Illuminate\Mail\Mailables\Headers;
 trait HasMailLog
 {
     /**
+     * Stamp every applicable X-Mail-* header onto the given Headers value.
+     * Call from the Mailable's headers() method:
+     *
+     *     return $this->withMailLog(new Headers());
+     */
+    public function withMailLog(Headers $headers): Headers
+    {
+        $text = [
+            'X-Mail-Class' => static::class,
+        ];
+
+        $notificationClass = $this->mailLogNotificationClass();
+
+        if ($notificationClass !== null && $notificationClass !== '') {
+            $text['X-Mail-Notification-Class'] = $notificationClass;
+        }
+
+        $model = $this->mailLogModel();
+
+        if ($model instanceof Model && $model->exists) {
+            $text['X-Mail-Model-Type'] = $model->getMorphClass();
+            $text['X-Mail-Model-Id'] = (string) $model->getKey();
+        }
+
+        $hints = $this->mailLogFingerprintHints();
+
+        if ($hints !== []) {
+            $text['X-Mail-Fingerprint-Hint'] = json_encode(
+                $hints,
+                JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR,
+            );
+        }
+
+        $mode = $this->mailLogFingerprintMode();
+
+        if (is_array($mode) && $mode !== []) {
+            $text['X-Mail-Fingerprint-Mode'] = json_encode(
+                array_values($mode),
+                JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR,
+            );
+        }
+
+        if ($this->mailLogSkip()) {
+            $text['X-Mail-Log-Skip'] = '1';
+        }
+
+        $headers->text = array_merge($headers->text, $text);
+
+        return $headers;
+    }
+
+    /**
      * Eloquent model that originated this mail. Returned model is folded
      * into the fingerprint when the active mode includes 'model'.
      */
@@ -86,57 +138,5 @@ trait HasMailLog
     protected function mailLogSkip(): bool
     {
         return false;
-    }
-
-    /**
-     * Stamp every applicable X-Mail-* header onto the given Headers value.
-     * Call from the Mailable's headers() method:
-     *
-     *     return $this->withMailLog(new Headers());
-     */
-    public function withMailLog(Headers $headers): Headers
-    {
-        $text = [
-            'X-Mail-Class' => static::class,
-        ];
-
-        $notificationClass = $this->mailLogNotificationClass();
-
-        if ($notificationClass !== null && $notificationClass !== '') {
-            $text['X-Mail-Notification-Class'] = $notificationClass;
-        }
-
-        $model = $this->mailLogModel();
-
-        if ($model instanceof Model && $model->exists) {
-            $text['X-Mail-Model-Type'] = $model->getMorphClass();
-            $text['X-Mail-Model-Id'] = (string) $model->getKey();
-        }
-
-        $hints = $this->mailLogFingerprintHints();
-
-        if ($hints !== []) {
-            $text['X-Mail-Fingerprint-Hint'] = json_encode(
-                $hints,
-                JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR,
-            );
-        }
-
-        $mode = $this->mailLogFingerprintMode();
-
-        if (is_array($mode) && $mode !== []) {
-            $text['X-Mail-Fingerprint-Mode'] = json_encode(
-                array_values($mode),
-                JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR,
-            );
-        }
-
-        if ($this->mailLogSkip()) {
-            $text['X-Mail-Log-Skip'] = '1';
-        }
-
-        $headers->text = array_merge($headers->text, $text);
-
-        return $headers;
     }
 }

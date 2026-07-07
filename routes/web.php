@@ -11,7 +11,7 @@ use Phattarachai\MailLogLaravel\Http\Controllers\TestSendController;
 Route::prefix((string) config('mail-log.ui.path', 'mail-log'))
     ->middleware(config('mail-log.ui.middleware', ['web']))
     ->name('mail-log.')
-    ->group(function () {
+    ->group(function (): void {
         Route::get('/', [GroupController::class, 'index'])->name('index');
         Route::post('/test-send', [TestSendController::class, 'store'])->name('test-send');
         Route::get('/{group}', [GroupController::class, 'show'])->name('show');

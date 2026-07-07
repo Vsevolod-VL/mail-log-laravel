@@ -17,6 +17,7 @@ use Phattarachai\MailLogLaravel\Models\MailLogGroup;
 use Phattarachai\MailLogLaravel\Support\Fingerprinter;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
+use Symfony\Component\Mime\Header\HeaderInterface;
 use Symfony\Component\Mime\Part\DataPart;
 use Throwable;
 
@@ -26,7 +27,7 @@ class LogOutgoingMail
 
     public function handleSending(MessageSending $event): ?bool
     {
-        if (! config('mail-log.enabled', true)) {
+        if (! config('mail-log.enabled', default: true)) {
             return null;
         }
 
@@ -44,7 +45,7 @@ class LogOutgoingMail
             $eventRow = DB::transaction(function () use ($message, $fingerprint, $mailer): MailLog {
                 $group = $this->resolveGroup($fingerprint, $message, $mailer);
 
-                return MailLog::create([
+                return MailLog::query()->create([
                     'group_id' => $group->id,
                     'to' => $this->extractAddresses($message->getTo()),
                     'cc' => $this->extractAddresses($message->getCc()) ?: null,
@@ -55,7 +56,7 @@ class LogOutgoingMail
 
             $headers = $message->getHeaders();
             $headers->addTextHeader('X-Mail-Log-Event-Id', (string) $eventRow->id);
-            $headers->addTextHeader('X-Mail-Log-Start', (string) microtime(true));
+            $headers->addTextHeader('X-Mail-Log-Start', (string) microtime(as_float: true));
         } catch (Throwable $e) {
             report($e);
         }
@@ -73,7 +74,7 @@ class LogOutgoingMail
                 return;
             }
 
-            $row = MailLog::find($eventId);
+            $row = MailLog::query()->find($eventId);
 
             if ($row === null) {
                 return;
@@ -120,7 +121,7 @@ class LogOutgoingMail
 
         $row = $this->resolveFailedEvent($eventId, $mailableClass, $modelType, $modelId);
 
-        if ($row === null) {
+        if (! $row instanceof MailLog) {
             return;
         }
 
@@ -145,7 +146,7 @@ class LogOutgoingMail
         ?string $modelId,
     ): ?MailLog {
         if ($eventId !== null) {
-            $row = MailLog::find($eventId);
+            $row = MailLog::query()->find($eventId);
 
             if ($row !== null) {
                 return $row;
@@ -172,16 +173,13 @@ class LogOutgoingMail
         $canonical = $this->canonicalAttributes($message, $mailer);
 
         try {
-            $group = MailLogGroup::firstOrCreate(
-                ['fingerprint' => $fingerprint],
-                $canonical + [
-                    'html_body' => $message->getHtmlBody(),
-                    'text_body' => $message->getTextBody(),
-                    'latest_status' => MailLogStatus::Pending,
-                ],
-            );
+            $group = MailLogGroup::query()->firstOrCreate(['fingerprint' => $fingerprint], $canonical + [
+                'html_body' => $message->getHtmlBody(),
+                'text_body' => $message->getTextBody(),
+                'latest_status' => MailLogStatus::Pending,
+            ]);
         } catch (UniqueConstraintViolationException) {
-            $group = MailLogGroup::where('fingerprint', $fingerprint)->firstOrFail();
+            $group = MailLogGroup::query()->where('fingerprint', $fingerprint)->firstOrFail();
         }
 
         if ($group->wasRecentlyCreated) {
@@ -215,7 +213,7 @@ class LogOutgoingMail
     {
         $header = $message->getHeaders()->get($name);
 
-        if ($header === null) {
+        if (! $header instanceof HeaderInterface) {
             return null;
         }
 
@@ -288,6 +286,6 @@ class LogOutgoingMail
             return null;
         }
 
-        return round(microtime(true) - (float) $start, 3);
+        return round(microtime(as_float: true) - (float) $start, 3);
     }
 }
