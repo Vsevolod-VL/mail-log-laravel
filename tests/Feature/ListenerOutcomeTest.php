@@ -18,8 +18,8 @@ use Phattarachai\MailLogLaravel\Listeners\LogOutgoingMail;
 use Phattarachai\MailLogLaravel\Models\MailLog;
 use Phattarachai\MailLogLaravel\Models\MailLogGroup;
 
-beforeEach(function () {
-    Relation::morphMap([], false);
+beforeEach(function (): void {
+    Relation::morphMap([], merge: false);
     MailLogGroup::registerMorphMap();
 
     config()->set('mail.default', 'array');
@@ -27,7 +27,7 @@ beforeEach(function () {
     config()->set('mail.from', ['address' => 'app@example.com', 'name' => 'App']);
 });
 
-it('flips the event to SENT and bumps the group sent_count on MessageSent', function () {
+it('flips the event to SENT and bumps the group sent_count on MessageSent', function (): void {
     $order = MailLogGroup::factory()->create();
 
     Mail::to('a@example.com')->send(new OutcomeOrderMail($order));
@@ -45,7 +45,7 @@ it('flips the event to SENT and bumps the group sent_count on MessageSent', func
         ->and($group->latest_status)->toBe(MailLogStatus::Sent);
 });
 
-it('flips the event to FAILED and bumps failed_count on JobFailed', function () {
+it('flips the event to FAILED and bumps failed_count on JobFailed', function (): void {
     $order = MailLogGroup::factory()->create();
     $group = MailLogGroup::factory()->create([
         'mailable_class' => OutcomeOrderMail::class,
@@ -83,7 +83,7 @@ it('flips the event to FAILED and bumps failed_count on JobFailed', function () 
         ->and($group->latest_status)->toBe(MailLogStatus::Failed);
 });
 
-it('reflects the most recent event status when mixed outcomes are recorded', function () {
+it('reflects the most recent event status when mixed outcomes are recorded', function (): void {
     $order = MailLogGroup::factory()->create();
 
     Mail::to('a@example.com')->send(new OutcomeOrderMail($order));
@@ -121,7 +121,7 @@ it('reflects the most recent event status when mixed outcomes are recorded', fun
         ->and($group->latest_status)->toBe(MailLogStatus::Failed);
 });
 
-it('calculates seconds from the X-Mail-Log-Start header set during handleSending', function () {
+it('calculates seconds from the X-Mail-Log-Start header set during handleSending', function (): void {
     $order = MailLogGroup::factory()->create();
 
     Mail::to('a@example.com')->send(new OutcomeOrderMail($order));
@@ -141,11 +141,6 @@ class OutcomeOrderMail extends Mailable
 
     public function __construct(public Model $order) {}
 
-    protected function mailLogModel(): ?Model
-    {
-        return $this->order;
-    }
-
     public function envelope(): Envelope
     {
         return new Envelope(subject: 'Outcome — order shipped');
@@ -159,5 +154,10 @@ class OutcomeOrderMail extends Mailable
     public function headers(): Headers
     {
         return $this->withMailLog(new Headers);
+    }
+
+    protected function mailLogModel(): ?Model
+    {
+        return $this->order;
     }
 }

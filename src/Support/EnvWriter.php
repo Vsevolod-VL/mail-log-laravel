@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Phattarachai\MailLogLaravel\Support;
 
-final class EnvWriter
+final readonly class EnvWriter
 {
-    public function __construct(private readonly string $path) {}
+    public function __construct(private string $path) {}
 
     public function exists(): bool
     {

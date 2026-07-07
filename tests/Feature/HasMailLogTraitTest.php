@@ -9,11 +9,11 @@ use Illuminate\Mail\Mailables\Headers;
 use Phattarachai\MailLogLaravel\Concerns\HasMailLog;
 use Phattarachai\MailLogLaravel\Models\MailLogGroup;
 
-beforeEach(function () {
-    Relation::morphMap([], false);
+beforeEach(function (): void {
+    Relation::morphMap([], merge: false);
 });
 
-it('stamps the X-Mail-Class header with the Mailable FQCN', function () {
+it('stamps the X-Mail-Class header with the Mailable FQCN', function (): void {
     $mail = new BareMailable;
 
     $headers = $mail->withMailLog(new Headers);
@@ -21,7 +21,7 @@ it('stamps the X-Mail-Class header with the Mailable FQCN', function () {
     expect($headers->text['X-Mail-Class'])->toBe(BareMailable::class);
 });
 
-it('stamps the X-Mail-Model-Type and X-Mail-Model-Id headers when a model is set', function () {
+it('stamps the X-Mail-Model-Type and X-Mail-Model-Id headers when a model is set', function (): void {
     MailLogGroup::registerMorphMap();
     $model = MailLogGroup::factory()->create();
 
@@ -32,58 +32,58 @@ it('stamps the X-Mail-Model-Type and X-Mail-Model-Id headers when a model is set
         ->and($headers->text['X-Mail-Model-Id'])->toBe((string) $model->getKey());
 });
 
-it('omits the model headers when no model is returned', function () {
+it('omits the model headers when no model is returned', function (): void {
     $headers = (new BareMailable)->withMailLog(new Headers);
 
     expect($headers->text)->not->toHaveKey('X-Mail-Model-Type')
         ->and($headers->text)->not->toHaveKey('X-Mail-Model-Id');
 });
 
-it('stamps the hint header as JSON when hints are provided', function () {
+it('stamps the hint header as JSON when hints are provided', function (): void {
     $mail = new MailableWithHints(['tenant_id' => 7, 'role' => 'admin']);
 
     $headers = $mail->withMailLog(new Headers);
 
     expect($headers->text)->toHaveKey('X-Mail-Fingerprint-Hint');
-    expect(json_decode($headers->text['X-Mail-Fingerprint-Hint'], true))
+    expect(json_decode((string) $headers->text['X-Mail-Fingerprint-Hint'], associative: true))
         ->toBe(['tenant_id' => 7, 'role' => 'admin']);
 });
 
-it('omits the hint header when hints are empty', function () {
+it('omits the hint header when hints are empty', function (): void {
     $headers = (new BareMailable)->withMailLog(new Headers);
 
     expect($headers->text)->not->toHaveKey('X-Mail-Fingerprint-Hint');
 });
 
-it('stamps the X-Mail-Fingerprint-Mode header when the override returns a mode list', function () {
+it('stamps the X-Mail-Fingerprint-Mode header when the override returns a mode list', function (): void {
     $mail = new MailableWithModeOverride(['class', 'model', 'hints']);
 
     $headers = $mail->withMailLog(new Headers);
 
     expect($headers->text)->toHaveKey('X-Mail-Fingerprint-Mode');
-    expect(json_decode($headers->text['X-Mail-Fingerprint-Mode'], true))
+    expect(json_decode((string) $headers->text['X-Mail-Fingerprint-Mode'], associative: true))
         ->toBe(['class', 'model', 'hints']);
 });
 
-it('omits the mode header when the trait returns the null default (config default applies)', function () {
+it('omits the mode header when the trait returns the null default (config default applies)', function (): void {
     $headers = (new BareMailable)->withMailLog(new Headers);
 
     expect($headers->text)->not->toHaveKey('X-Mail-Fingerprint-Mode');
 });
 
-it('stamps the X-Mail-Log-Skip header when mailLogSkip is true', function () {
+it('stamps the X-Mail-Log-Skip header when mailLogSkip is true', function (): void {
     $headers = (new SkippedMailable)->withMailLog(new Headers);
 
     expect($headers->text['X-Mail-Log-Skip'])->toBe('1');
 });
 
-it('stamps the notification class header when the host returns one', function () {
+it('stamps the notification class header when the host returns one', function (): void {
     $headers = (new NotificationDrivenMailable)->withMailLog(new Headers);
 
     expect($headers->text['X-Mail-Notification-Class'])->toBe('App\\Notifications\\OrderShipped');
 });
 
-it('merges into rather than overwrites existing headers text array', function () {
+it('merges into rather than overwrites existing headers text array', function (): void {
     $headers = new Headers;
     $headers->text = ['X-Existing' => 'preserve-me'];
 

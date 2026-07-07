@@ -7,7 +7,7 @@ use Phattarachai\MailLogLaravel\Enums\MailLogStatus;
 use Phattarachai\MailLogLaravel\Models\MailLog;
 use Phattarachai\MailLogLaravel\Models\MailLogGroup;
 
-it('creates a row from the factory with every expected column', function () {
+it('creates a row from the factory with every expected column', function (): void {
     $event = MailLog::factory()->create();
 
     expect($event->exists)->toBeTrue()
@@ -21,14 +21,14 @@ it('creates a row from the factory with every expected column', function () {
     ]))->toBeTrue();
 });
 
-it('does not include updated_at on the events table or model', function () {
+it('does not include updated_at on the events table or model', function (): void {
     $event = MailLog::factory()->create();
 
     expect(Schema::hasColumn($event->getTable(), 'updated_at'))->toBeFalse()
         ->and($event->getUpdatedAtColumn())->toBeNull();
 });
 
-it('belongs to its parent group', function () {
+it('belongs to its parent group', function (): void {
     $group = MailLogGroup::factory()->create();
     $event = MailLog::factory()->for($group, 'group')->create();
 
@@ -36,7 +36,7 @@ it('belongs to its parent group', function () {
         ->and($event->group->id)->toBe($group->id);
 });
 
-it('exposes failed and pending factory states', function () {
+it('exposes failed and pending factory states', function (): void {
     expect(MailLog::factory()->pending()->create())
         ->status->toBe(MailLogStatus::Pending)
         ->sent_at->toBeNull()
@@ -47,7 +47,7 @@ it('exposes failed and pending factory states', function () {
         ->error_message->not->toBeEmpty();
 });
 
-it('casts the recipient columns as arrays', function () {
+it('casts the recipient columns as arrays', function (): void {
     $event = MailLog::factory()->create([
         'to' => ['a@example.com', 'b@example.com'],
         'cc' => ['c@example.com'],

@@ -17,7 +17,7 @@ class InstallCommand extends Command
      *
      * @var array<string, string>
      */
-    private const ENV_DEFAULTS = [
+    private const array ENV_DEFAULTS = [
         'MAIL_LOG_ENABLED' => 'true',
         'MAIL_LOG_RETENTION_DAYS' => '365',
         'MAIL_LOG_UI_PATH' => 'mail-log',
@@ -105,7 +105,7 @@ class InstallCommand extends Command
             return;
         }
 
-        if (! $this->confirm('Run `php artisan migrate` now?', true)) {
+        if (! $this->confirm('Run `php artisan migrate` now?', default: true)) {
             $this->line('Skipped migrations — run `php artisan migrate` manually when ready.');
 
             return;
@@ -232,13 +232,7 @@ class InstallCommand extends Command
             return false;
         }
 
-        foreach ((array) glob($path.'/*.php') as $file) {
-            if (is_string($file) && str_contains(basename($file), $needle)) {
-                return true;
-            }
-        }
-
-        return false;
+        return array_any((array) glob($path.'/*.php'), fn ($file) => is_string($file) && str_contains(basename($file), $needle));
     }
 
     private function writeRawHeader(string $message): void

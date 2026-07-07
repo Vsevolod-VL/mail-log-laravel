@@ -8,11 +8,11 @@ use Phattarachai\MailLogLaravel\Enums\MailLogStatus;
 use Phattarachai\MailLogLaravel\Models\MailLog;
 use Phattarachai\MailLogLaravel\Models\MailLogGroup;
 
-it('creates a row from the factory with every expected column', function () {
+it('creates a row from the factory with every expected column', function (): void {
     $group = MailLogGroup::factory()->create();
 
     expect($group->exists)->toBeTrue()
-        ->and(strlen($group->fingerprint))->toBe(64)
+        ->and(strlen((string) $group->fingerprint))->toBe(64)
         ->and($group->subject)->not->toBeEmpty()
         ->and($group->latest_status)->toBe(MailLogStatus::Sent)
         ->and($group->sent_count)->toBe(1)
@@ -26,7 +26,7 @@ it('creates a row from the factory with every expected column', function () {
     ]))->toBeTrue();
 });
 
-it('exposes factory states for the common dashboard scenarios', function () {
+it('exposes factory states for the common dashboard scenarios', function (): void {
     expect(MailLogGroup::factory()->pending()->create()->latest_status)->toBe(MailLogStatus::Pending)
         ->and(MailLogGroup::factory()->failed()->create()->latest_status)->toBe(MailLogStatus::Failed)
         ->and(MailLogGroup::factory()->merged()->create()->sent_count)->toBe(5)
@@ -36,7 +36,7 @@ it('exposes factory states for the common dashboard scenarios', function () {
         ->latest_status->toBe(MailLogStatus::Sent);
 });
 
-it('relates to events via group_id and ordered latest-first', function () {
+it('relates to events via group_id and ordered latest-first', function (): void {
     $group = MailLogGroup::factory()->create(['sent_count' => 0]);
     $older = MailLog::factory()->for($group, 'group')->create(['created_at' => now()->subHour()]);
     $newer = MailLog::factory()->for($group, 'group')->create(['created_at' => now()]);
@@ -45,7 +45,7 @@ it('relates to events via group_id and ordered latest-first', function () {
         ->and($group->latestEvent()->first()->id)->toBe($newer->id);
 });
 
-it('records a sent event by bumping sent_count + latest_status + touching updated_at', function () {
+it('records a sent event by bumping sent_count + latest_status + touching updated_at', function (): void {
     $group = MailLogGroup::factory()->create([
         'sent_count' => 2,
         'failed_count' => 0,
@@ -65,7 +65,7 @@ it('records a sent event by bumping sent_count + latest_status + touching update
         ->and($group->updated_at)->toBeGreaterThan($before);
 });
 
-it('records a failed event by bumping failed_count + flipping latest_status', function () {
+it('records a failed event by bumping failed_count + flipping latest_status', function (): void {
     $group = MailLogGroup::factory()->create([
         'sent_count' => 3,
         'failed_count' => 0,
@@ -82,7 +82,7 @@ it('records a failed event by bumping failed_count + flipping latest_status', fu
         ->and($group->latest_status)->toBe(MailLogStatus::Failed);
 });
 
-it('does not bump counters for pending events', function () {
+it('does not bump counters for pending events', function (): void {
     $group = MailLogGroup::factory()->create(['sent_count' => 0, 'failed_count' => 0]);
     $event = MailLog::factory()->for($group, 'group')->pending()->create();
 
@@ -94,13 +94,13 @@ it('does not bump counters for pending events', function () {
         ->and($group->latest_status)->toBe(MailLogStatus::Pending);
 });
 
-it('computes success rate as sent / (sent + failed)', function () {
+it('computes success rate as sent / (sent + failed)', function (): void {
     expect(MailLogGroup::factory()->make(['sent_count' => 0, 'failed_count' => 0])->successRate())->toBe(1.0)
         ->and(MailLogGroup::factory()->make(['sent_count' => 4, 'failed_count' => 1])->successRate())->toBe(0.8)
         ->and(MailLogGroup::factory()->make(['sent_count' => 0, 'failed_count' => 3])->successRate())->toBe(0.0);
 });
 
-it('cascade-deletes events when a group is deleted', function () {
+it('cascade-deletes events when a group is deleted', function (): void {
     $group = MailLogGroup::factory()->create();
     MailLog::factory()->for($group, 'group')->count(3)->create();
 
@@ -111,7 +111,7 @@ it('cascade-deletes events when a group is deleted', function () {
     expect(MailLog::query()->count())->toBe(0);
 });
 
-it('prunes groups older than retention_days and leaves fresh groups alone', function () {
+it('prunes groups older than retention_days and leaves fresh groups alone', function (): void {
     config()->set('mail-log.retention_days', 30);
 
     $stale = MailLogGroup::factory()->create(['updated_at' => now()->subDays(60)]);
@@ -123,23 +123,23 @@ it('prunes groups older than retention_days and leaves fresh groups alone', func
         ->and($pruned->contains('id', $fresh->id))->toBeFalse();
 });
 
-it('prunes nothing when retention_days is null', function () {
-    config()->set('mail-log.retention_days', null);
+it('prunes nothing when retention_days is null', function (): void {
+    config()->set('mail-log.retention_days');
 
     MailLogGroup::factory()->create(['updated_at' => now()->subYears(5)]);
 
     expect(MailLogGroup::factory()->make()->prunable()->count())->toBe(0);
 });
 
-it('registers a stable morph alias for the group model', function () {
-    Relation::morphMap([], false);
+it('registers a stable morph alias for the group model', function (): void {
+    Relation::morphMap([], merge: false);
 
     MailLogGroup::registerMorphMap();
 
     expect(Relation::morphMap()['mail_log_group'])->toBe(MailLogGroup::class);
 });
 
-it('aggregates unique recipients across events', function () {
+it('aggregates unique recipients across events', function (): void {
     $group = MailLogGroup::factory()->create(['sent_count' => 0]);
     MailLog::factory()->for($group, 'group')->create(['to' => ['a@example.com']]);
     MailLog::factory()->for($group, 'group')->create(['to' => ['b@example.com']]);

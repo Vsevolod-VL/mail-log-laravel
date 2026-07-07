@@ -1,9 +1,10 @@
 <?php
 
 declare(strict_types=1);
+use Phattarachai\MailLogLaravel\Http\Middleware\Authorize;
 
 return [
-    'enabled' => env('MAIL_LOG_ENABLED', true),
+    'enabled' => env('MAIL_LOG_ENABLED', default: true),
 
     'tables' => [
         'groups' => env('MAIL_LOG_TABLE_GROUPS', 'mail_log_groups'),
@@ -42,7 +43,7 @@ return [
 
     'ui' => [
         'path' => env('MAIL_LOG_UI_PATH', 'mail-log'),
-        'middleware' => ['web', \Phattarachai\MailLogLaravel\Http\Middleware\Authorize::class],
+        'middleware' => ['web', Authorize::class],
         'auth_default' => 'debug-only',
         'page_size' => (int) env('MAIL_LOG_UI_PAGE_SIZE', 25),
         'brand' => env('MAIL_LOG_UI_BRAND', 'Mail Log'),
@@ -60,6 +61,6 @@ return [
     'morph_alias' => env('MAIL_LOG_MORPH_ALIAS', 'mail_log_group'),
 
     'test_send' => [
-        'enabled' => filter_var(env('MAIL_LOG_TEST_SEND_ENABLED', true), FILTER_VALIDATE_BOOL),
+        'enabled' => filter_var(env('MAIL_LOG_TEST_SEND_ENABLED', default: true), FILTER_VALIDATE_BOOL),
     ],
 ];

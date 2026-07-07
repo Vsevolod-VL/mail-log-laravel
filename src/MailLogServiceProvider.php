@@ -10,12 +10,14 @@ use Illuminate\Queue\Events\JobFailed;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
+use Override;
 use Phattarachai\MailLogLaravel\Console\InstallCommand;
 use Phattarachai\MailLogLaravel\Listeners\LogOutgoingMail;
 use Phattarachai\MailLogLaravel\Support\Fingerprinter;
 
 class MailLogServiceProvider extends ServiceProvider
 {
+    #[Override]
     public function register(): void
     {
         $this->mergeConfigFrom(__DIR__.'/../config/mail-log.php', 'mail-log');

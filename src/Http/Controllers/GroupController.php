@@ -21,18 +21,18 @@ class GroupController
             'has_failures' => $request->boolean('has_failures'),
         ];
 
-        $query = MailLogGroup::query()->orderByDesc('updated_at');
+        $query = MailLogGroup::query()->latest('updated_at');
 
         if ($filters['search'] !== '') {
             $term = '%'.$filters['search'].'%';
             $eventsTable = (new MailLog)->getTable();
             $groupsTable = (new MailLogGroup)->getTable();
 
-            $query->where(function ($q) use ($term, $eventsTable, $groupsTable) {
+            $query->where(function ($q) use ($term, $eventsTable, $groupsTable): void {
                 $q->where('subject', 'like', $term)
                     ->orWhere('mailable_class', 'like', $term)
                     ->orWhere('notification_class', 'like', $term)
-                    ->orWhereExists(function ($sub) use ($term, $eventsTable, $groupsTable) {
+                    ->orWhereExists(function ($sub) use ($term, $eventsTable, $groupsTable): void {
                         $sub->select('id')
                             ->from($eventsTable)
                             ->whereColumn('group_id', $groupsTable.'.id')
@@ -85,8 +85,7 @@ class GroupController
     {
         $group->delete();
 
-        return redirect()
-            ->route('mail-log.index')
+        return to_route('mail-log.index')
             ->with('mail-log:flash', 'ลบกลุ่มและการส่งทั้งหมดในกลุ่มแล้ว');
     }
 }

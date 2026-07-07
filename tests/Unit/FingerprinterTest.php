@@ -24,7 +24,7 @@ function makeEmail(array $headers = [], string $subject = 'Hello', string $html 
     return $email;
 }
 
-it('produces identical fingerprints for the same class + model', function () {
+it('produces identical fingerprints for the same class + model', function (): void {
     $fp = app(Fingerprinter::class);
 
     $a = makeEmail([
@@ -43,7 +43,7 @@ it('produces identical fingerprints for the same class + model', function () {
         ->and(strlen($fp($a)))->toBe(64);
 });
 
-it('keeps the fingerprint stable when only body bytes differ', function () {
+it('keeps the fingerprint stable when only body bytes differ', function (): void {
     $fp = app(Fingerprinter::class);
 
     $headers = [
@@ -58,7 +58,7 @@ it('keeps the fingerprint stable when only body bytes differ', function () {
     expect($fp($a))->toBe($fp($b));
 });
 
-it('produces different fingerprints for different mailable classes', function () {
+it('produces different fingerprints for different mailable classes', function (): void {
     $fp = app(Fingerprinter::class);
 
     $a = makeEmail([
@@ -76,7 +76,7 @@ it('produces different fingerprints for different mailable classes', function ()
     expect($fp($a))->not->toBe($fp($b));
 });
 
-it('produces different fingerprints for different model ids', function () {
+it('produces different fingerprints for different model ids', function (): void {
     $fp = app(Fingerprinter::class);
 
     $a = makeEmail([
@@ -94,7 +94,7 @@ it('produces different fingerprints for different model ids', function () {
     expect($fp($a))->not->toBe($fp($b));
 });
 
-it('folds hints into the fingerprint when the mode includes hints', function () {
+it('folds hints into the fingerprint when the mode includes hints', function (): void {
     $fp = app(Fingerprinter::class);
 
     $a = makeEmail([
@@ -116,7 +116,7 @@ it('folds hints into the fingerprint when the mode includes hints', function () 
     expect($fp($a))->not->toBe($fp($b));
 });
 
-it('produces identical fingerprints when hint keys arrive in different order', function () {
+it('produces identical fingerprints when hint keys arrive in different order', function (): void {
     $fp = app(Fingerprinter::class);
 
     $a = makeEmail([
@@ -134,7 +134,7 @@ it('produces identical fingerprints when hint keys arrive in different order', f
     expect($fp($a))->toBe($fp($b));
 });
 
-it('falls back to subject + mailer + body for raw mail without class headers', function () {
+it('falls back to subject + mailer + body for raw mail without class headers', function (): void {
     $fp = app(Fingerprinter::class);
 
     $a = makeEmail([], subject: 'Daily digest', html: '<p>Same</p>', text: 'Same');
@@ -149,7 +149,7 @@ it('falls back to subject + mailer + body for raw mail without class headers', f
     expect($fp($a, 'smtp'))->not->toBe($fp($differentMailer, 'ses'));
 });
 
-it('honors an X-Mail-Fingerprint hard override', function () {
+it('honors an X-Mail-Fingerprint hard override', function (): void {
     $fp = app(Fingerprinter::class);
 
     $hex = str_repeat('a', 64);

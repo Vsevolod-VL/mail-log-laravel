@@ -24,8 +24,8 @@ class EventController
             'bcc' => $event->bcc,
             'error_message' => $event->error_message,
             'seconds' => $event->seconds,
-            'sent_at' => optional($event->sent_at)->toIso8601String(),
-            'created_at' => optional($event->created_at)->toIso8601String(),
+            'sent_at' => $event->sent_at?->toIso8601String(),
+            'created_at' => $event->created_at?->toIso8601String(),
         ]);
     }
 }

@@ -6,6 +6,7 @@ namespace Phattarachai\MailLogLaravel\Support;
 
 use JsonException;
 use Symfony\Component\Mime\Email;
+use Symfony\Component\Mime\Header\HeaderInterface;
 use Symfony\Component\Mime\Header\Headers;
 
 class Fingerprinter
@@ -61,10 +62,10 @@ class Fingerprinter
 
         if ($modeHeader !== null) {
             try {
-                $decoded = json_decode($modeHeader, true, flags: JSON_THROW_ON_ERROR);
+                $decoded = json_decode($modeHeader, associative: true, flags: JSON_THROW_ON_ERROR);
 
                 if (is_array($decoded) && $decoded !== []) {
-                    return array_values(array_filter($decoded, 'is_string'));
+                    return array_values(array_filter($decoded, is_string(...)));
                 }
             } catch (JsonException) {
                 // fall through to the config default
@@ -73,7 +74,7 @@ class Fingerprinter
 
         $default = (array) config('mail-log.fingerprint.default_mode', ['class', 'model']);
 
-        return array_values(array_filter($default, 'is_string'));
+        return array_values(array_filter($default, is_string(...)));
     }
 
     private function resolveInput(string $name, Email $message, Headers $headers, ?string $mailerName): ?string
@@ -85,7 +86,7 @@ class Fingerprinter
             'hints' => $this->resolveHints($headers),
             'subject' => (string) $message->getSubject(),
             'body' => $this->bodyHash($message),
-            'mailer' => (string) ($mailerName ?? ''),
+            'mailer' => $mailerName ?? '',
             default => null,
         };
     }
@@ -111,7 +112,7 @@ class Fingerprinter
         }
 
         try {
-            $decoded = json_decode($raw, true, flags: JSON_THROW_ON_ERROR);
+            $decoded = json_decode($raw, associative: true, flags: JSON_THROW_ON_ERROR);
         } catch (JsonException) {
             return $raw;
         }
@@ -168,7 +169,7 @@ class Fingerprinter
     {
         $header = $headers->get($name);
 
-        if ($header === null) {
+        if (! $header instanceof HeaderInterface) {
             return null;
         }
 

@@ -16,11 +16,18 @@ class MailLog
      *
      * @var array<int, string>
      */
-    private const THAI_MONTHS = [
+    private const array THAI_MONTHS = [
         1 => 'ม.ค.', 2 => 'ก.พ.', 3 => 'มี.ค.', 4 => 'เม.ย.',
         5 => 'พ.ค.', 6 => 'มิ.ย.', 7 => 'ก.ค.', 8 => 'ส.ค.',
         9 => 'ก.ย.', 10 => 'ต.ค.', 11 => 'พ.ย.', 12 => 'ธ.ค.',
     ];
+
+    /**
+     * Host-registered authorization gate. When null, falls back to APP_DEBUG.
+     *
+     * @var (Closure(Request): bool)|null
+     */
+    protected static ?Closure $authCallback = null;
 
     /**
      * Format a date as `19 พ.ค. 67 · 14:34` (day + Thai abbrev + 2-digit Buddhist
@@ -28,7 +35,7 @@ class MailLog
      */
     public static function dt(?CarbonInterface $date): string
     {
-        if ($date === null) {
+        if (! $date instanceof CarbonInterface) {
             return '—';
         }
 
@@ -40,13 +47,6 @@ class MailLog
             $date->format('H:i'),
         );
     }
-
-    /**
-     * Host-registered authorization gate. When null, falls back to APP_DEBUG.
-     *
-     * @var (Closure(Request): bool)|null
-     */
-    protected static ?Closure $authCallback = null;
 
     /**
      * Cached, inlined CSS bundle for the dashboard layout.
@@ -76,7 +76,7 @@ class MailLog
         }
 
         $prelude = sprintf(
-            "window.MailLog = window.MailLog || {csrfToken: %s, basePath: %s};",
+            'window.MailLog = window.MailLog || {csrfToken: %s, basePath: %s};',
             json_encode(csrf_token(), JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES),
             json_encode('/'.ltrim((string) config('mail-log.ui.path', 'mail-log'), '/'), JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES),
         );
@@ -101,11 +101,11 @@ class MailLog
      */
     public static function check(Request $request): bool
     {
-        if (static::$authCallback !== null) {
+        if (static::$authCallback instanceof Closure) {
             return (bool) (static::$authCallback)($request);
         }
 
-        return (bool) config('app.debug', false);
+        return (bool) config('app.debug', default: false);
     }
 
     /**

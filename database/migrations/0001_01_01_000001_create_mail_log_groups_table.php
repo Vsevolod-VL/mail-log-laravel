@@ -10,7 +10,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create($this->table(), function (Blueprint $table) {
+        Schema::create($this->table(), function (Blueprint $table): void {
             $table->id();
             $table->char('fingerprint', 64)->unique();
             $table->string('subject')->nullable();
