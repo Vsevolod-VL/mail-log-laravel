@@ -7,10 +7,10 @@ use Illuminate\Mail\Events\MessageSent;
 use Illuminate\Queue\Events\JobFailed;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
-use Phattarachai\MailLogLaravel\Http\Middleware\Authorize;
-use Phattarachai\MailLogLaravel\Listeners\LogOutgoingMail;
-use Phattarachai\MailLogLaravel\MailLog;
-use Phattarachai\MailLogLaravel\Support\Fingerprinter;
+use VsevolodVL\MailLogLaravel\Http\Middleware\Authorize;
+use VsevolodVL\MailLogLaravel\Listeners\LogOutgoingMail;
+use VsevolodVL\MailLogLaravel\MailLog;
+use VsevolodVL\MailLogLaravel\Support\Fingerprinter;
 
 it('merges the package config', function (): void {
     expect(config('mail-log.tables.groups'))->toBe('mail_log_groups')

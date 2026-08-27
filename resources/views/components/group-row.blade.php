@@ -1,15 +1,16 @@
 @props(['group'])
 
 @php
-    use Phattarachai\MailLogLaravel\Enums\MailLogStatus;
-    use Phattarachai\MailLogLaravel\MailLog;
+    use VsevolodVL\MailLogLaravel\MailLog;
+    use VsevolodVL\MailLogLaravel\Models\MailLogGroup;
 
-    /** @var \Phattarachai\MailLogLaravel\Models\MailLogGroup $group */
+    /** @var MailLogGroup $group */
     $recipients = $group->uniqueRecipients();
     $firstRecipient = $recipients->first();
     $extra = max(0, $recipients->count() - 1);
     $multi = ($group->sent_count + $group->failed_count) > 1;
-    $latestError = $group->latest_status === MailLogStatus::Failed
+    $isFailed = $group->latest_status?->value === 'failed';
+    $latestError = $isFailed
         ? optional($group->latestEvent)->error_message
         : null;
 @endphp
@@ -19,33 +20,34 @@
         <a href="{{ route('mail-log.show', $group) }}" class="block font-mono">
             <div class="text-xs text-zinc-700">{{ MailLog::dt($group->updated_at) }}</div>
             @if ($multi)
-                <div class="text-[10px] text-zinc-400">first {{ optional($group->created_at)->format('H:i') }}</div>
+                <div class="text-[10px] text-zinc-400">zuerst {{ optional($group->created_at)->format('H:i') }}</div>
             @endif
         </a>
     </td>
     <td class="px-3 py-2.5 align-top">
         @if ($group->latest_status)
-            <x-mail-log::status-badge :status="$group->latest_status" />
+            <x-mail-log::status-badge :status="$group->latest_status"/>
         @endif
-        @if ($group->failed_count > 0 && $group->latest_status !== MailLogStatus::Failed)
+        @if ($group->failed_count > 0 && !$isFailed)
             <div class="mt-1">
-                <x-mail-log::failed-error-chip :count="$group->failed_count" />
+                <x-mail-log::failed-error-chip :count="$group->failed_count"/>
             </div>
         @endif
     </td>
     <td class="px-3 py-2.5 align-top">
         <a href="{{ route('mail-log.show', $group) }}" class="font-medium text-zinc-900 hover:underline">
-            {{ $group->subject ?: '(no subject)' }}
+            {{ $group->subject ?: '(kein Betreff)' }}
         </a>
         @if ($latestError)
-            <x-mail-log::failed-error-chip :message="$latestError" />
+            <x-mail-log::failed-error-chip :message="$latestError"/>
         @endif
     </td>
     <td class="px-3 py-2.5 align-top text-zinc-600">
         @if ($firstRecipient)
             <span>{{ $firstRecipient }}</span>
             @if ($extra > 0)
-                <span class="ml-1 inline-flex h-5 items-center rounded-full bg-zinc-100 px-1.5 font-mono text-[11px] text-zinc-600">+{{ $extra }} more</span>
+                <span
+                        class="ml-1 inline-flex h-5 items-center rounded-full bg-zinc-100 px-1.5 font-mono text-[11px] text-zinc-600">+{{ $extra }} weitere</span>
             @endif
         @else
             <span class="text-zinc-400">—</span>
@@ -62,7 +64,8 @@
     </td>
     <td class="px-3 py-2.5 align-top">
         @if ($group->mailer)
-            <span class="inline-flex items-center rounded-md bg-zinc-100 px-1.5 py-0.5 font-mono text-[11px] text-zinc-600">{{ $group->mailer }}</span>
+            <span
+                    class="inline-flex items-center rounded-md bg-zinc-100 px-1.5 py-0.5 font-mono text-[11px] text-zinc-600">{{ $group->mailer }}</span>
         @else
             <span class="text-zinc-400">—</span>
         @endif

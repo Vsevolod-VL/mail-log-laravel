@@ -1,5 +1,5 @@
 {
-    "name": "phattarachai/mail-log-laravel",
+    "name": "vsevolod-vl/mail-log-laravel",
     "description": "Self-hosted outbound mail logger for Laravel — captures Mail + Notification sends, groups by Mailable class + model, ships its own Tailwind UI.",
     "type": "library",
     "license": "MIT",
@@ -11,8 +11,8 @@
     ],
     "authors": [
         {
-            "name": "Phattarachai Chaimongkol",
-            "email": "pc@phattarachai.dev"
+            "name": "Vsevolod Lukanov",
+            "email": "vl@example.com"
         }
     ],
     "require": {
@@ -38,13 +38,13 @@
     },
     "autoload": {
         "psr-4": {
-            "Phattarachai\\MailLogLaravel\\": "src/",
-            "Phattarachai\\MailLogLaravel\\Database\\Factories\\": "database/factories/"
+            "VsevolodVL\\MailLogLaravel\\": "src/",
+            "VsevolodVL\\MailLogLaravel\\Database\\Factories\\": "database/factories/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Phattarachai\\MailLogLaravel\\Tests\\": "tests/"
+            "VsevolodVL\\MailLogLaravel\\Tests\\": "tests/"
         }
     },
     "scripts": {
@@ -55,7 +55,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Phattarachai\\MailLogLaravel\\MailLogServiceProvider"
+                "VsevolodVL\\MailLogLaravel\\MailLogServiceProvider"
             ]
         }
     },

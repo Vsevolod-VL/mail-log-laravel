@@ -12,11 +12,11 @@ use Illuminate\Mail\Mailables\Headers;
 use Illuminate\Mail\SendQueuedMailable;
 use Illuminate\Queue\Events\JobFailed;
 use Illuminate\Support\Facades\Mail;
-use Phattarachai\MailLogLaravel\Concerns\HasMailLog;
-use Phattarachai\MailLogLaravel\Enums\MailLogStatus;
-use Phattarachai\MailLogLaravel\Listeners\LogOutgoingMail;
-use Phattarachai\MailLogLaravel\Models\MailLog;
-use Phattarachai\MailLogLaravel\Models\MailLogGroup;
+use VsevolodVL\MailLogLaravel\Concerns\HasMailLog;
+use VsevolodVL\MailLogLaravel\Enums\MailLogStatus;
+use VsevolodVL\MailLogLaravel\Listeners\LogOutgoingMail;
+use VsevolodVL\MailLogLaravel\Models\MailLog;
+use VsevolodVL\MailLogLaravel\Models\MailLogGroup;
 
 beforeEach(function (): void {
     Relation::morphMap([], merge: false);

@@ -1,9 +1,10 @@
 @props(['group'])
 
 @php
-    use Phattarachai\MailLogLaravel\MailLog;
+    use VsevolodVL\MailLogLaravel\Models\MailLogGroup;
+    use VsevolodVL\MailLogLaravel\MailLog;
 
-    /** @var \Phattarachai\MailLogLaravel\Models\MailLogGroup $group */
+    /** @var MailLogGroup $group */
     $rate = (int) round($group->successRate() * 100);
     $rateColor = match (true) {
         $rate >= 99 => 'text-emerald-600',
@@ -18,30 +19,31 @@
             <div class="text-[11px] uppercase text-zinc-500">Status</div>
             <div class="mt-1 flex items-center gap-1.5">
                 @if ($group->latest_status)
-                    <x-mail-log::status-badge :status="$group->latest_status" />
+                    <x-mail-log::status-badge :status="$group->latest_status"/>
                 @else
                     <span class="text-zinc-400">—</span>
                 @endif
             </div>
         </div>
         <div>
-            <div class="text-[11px] uppercase text-zinc-500">Sends</div>
+            <div class="text-[11px] uppercase text-zinc-500">Sendungen</div>
             <div class="mt-1 font-mono text-xl font-semibold tracking-tight text-zinc-900">{{ $group->sent_count + $group->failed_count }}</div>
         </div>
         <div>
-            <div class="text-[11px] uppercase text-zinc-500">Failed</div>
-            <div class="mt-1 font-mono text-xl font-semibold tracking-tight {{ $group->failed_count > 0 ? 'text-rose-600' : 'text-zinc-400' }}">{{ $group->failed_count }}</div>
+            <div class="text-[11px] uppercase text-zinc-500">Fehlgeschlagen</div>
+            <div
+                    class="mt-1 font-mono text-xl font-semibold tracking-tight {{ $group->failed_count > 0 ? 'text-rose-600' : 'text-zinc-400' }}">{{ $group->failed_count }}</div>
         </div>
         <div>
-            <div class="text-[11px] uppercase text-zinc-500">Success rate</div>
+            <div class="text-[11px] uppercase text-zinc-500">Erfolgsrate</div>
             <div class="mt-1 font-mono text-xl font-semibold tracking-tight {{ $rateColor }}">{{ $rate }}%</div>
         </div>
         <div>
-            <div class="text-[11px] uppercase text-zinc-500">First sent</div>
+            <div class="text-[11px] uppercase text-zinc-500">Erstmals gesendet</div>
             <div class="mt-1 font-mono text-xs text-zinc-700">{{ MailLog::dt($group->created_at) }}</div>
         </div>
         <div>
-            <div class="text-[11px] uppercase text-zinc-500">Last sent</div>
+            <div class="text-[11px] uppercase text-zinc-500">Zuletzt gesendet</div>
             <div class="mt-1 font-mono text-xs text-zinc-700">{{ MailLog::dt($group->updated_at) }}</div>
         </div>
     </div>

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Phattarachai\MailLogLaravel\Concerns;
+namespace VsevolodVL\MailLogLaravel\Concerns;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Mail\Mailables\Headers;

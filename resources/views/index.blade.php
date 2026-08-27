@@ -1,4 +1,4 @@
-@extends('mail-log::layout', ['title' => 'Inbox'])
+@extends('mail-log::layout', ['title' => 'Posteingang'])
 
 @section('content')
     <div class="border-b border-zinc-200 bg-zinc-50/60">
@@ -11,7 +11,7 @@
                         name="search"
                         value="{{ $filters['search'] ?? '' }}"
                         class="h-9 w-72 rounded-md border border-zinc-200 bg-white pl-8 pr-3 text-sm placeholder:text-zinc-400 focus:border-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-100"
-                        placeholder="ค้นหา subject, recipient, mailable class…"
+                        placeholder="Betreff, Empfänger, Mailable-Klasse suchen…"
                     >
                 </div>
 
@@ -20,10 +20,10 @@
                     class="h-9 rounded-md border border-zinc-200 bg-white px-2 text-sm text-zinc-700 focus:border-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-100"
                     onchange="this.form.submit()"
                 >
-                    <option value="">All statuses</option>
-                    <option value="sent" @selected(($filters['status'] ?? '') === 'sent')>Sent</option>
-                    <option value="pending" @selected(($filters['status'] ?? '') === 'pending')>Pending</option>
-                    <option value="failed" @selected(($filters['status'] ?? '') === 'failed')>Failed</option>
+                    <option value="">Alle Status</option>
+                    <option value="sent" @selected(($filters['status'] ?? '') === 'sent')>Gesendet</option>
+                    <option value="pending" @selected(($filters['status'] ?? '') === 'pending')>Ausstehend</option>
+                    <option value="failed" @selected(($filters['status'] ?? '') === 'failed')>Fehlgeschlagen</option>
                 </select>
 
                 <label class="ml-2 inline-flex items-center gap-2 text-sm text-zinc-600">
@@ -34,19 +34,19 @@
                         @checked(!empty($filters['has_failures']))
                         class="h-4 w-4 rounded border-zinc-300 text-zinc-900 focus:ring-zinc-400"
                         onchange="this.form.submit()"
-                    > Has failures
+                    > Mit Fehlern
                 </label>
 
-                <button type="submit" class="hidden">Apply</button>
+                <button type="submit" class="hidden">Anwenden</button>
 
                 @if (!empty(array_filter($filters)))
-                    <a href="{{ route('mail-log.index') }}" class="ml-1 text-xs text-zinc-500 underline-offset-2 hover:underline">Clear</a>
+                    <a href="{{ route('mail-log.index') }}" class="ml-1 text-xs text-zinc-500 underline-offset-2 hover:underline">Zurücksetzen</a>
                 @endif
             </form>
 
             <div class="ml-auto font-mono text-xs text-zinc-500">
-                <span>{{ number_format($stats['groups']) }}</span> groups ·
-                <span>{{ number_format($stats['sends']) }}</span> sends total
+                <span>{{ number_format($stats['groups']) }}</span> Gruppen ·
+                <span>{{ number_format($stats['sends']) }}</span> Sendungen gesamt
             </div>
         </div>
     </div>
@@ -58,13 +58,13 @@
             <table class="w-full text-sm">
                 <thead>
                     <tr class="border-b border-zinc-200 text-left text-xs font-medium uppercase text-zinc-500">
-                        <th class="whitespace-nowrap py-2.5 font-medium">Last sent</th>
+                        <th class="whitespace-nowrap py-2.5 font-medium">Zuletzt gesendet</th>
                         <th class="px-3 py-2.5 font-medium">Status</th>
-                        <th class="px-3 py-2.5 font-medium">Subject</th>
-                        <th class="px-3 py-2.5 font-medium">Recipients</th>
-                        <th class="px-3 py-2.5 font-medium">Mailable</th>
-                        <th class="px-3 py-2.5 font-medium">Mailer</th>
-                        <th class="px-3 py-2.5 text-right font-medium" title="Send count">× <span class="font-normal lowercase">sends</span></th>
+                        <th class="px-3 py-2.5 font-medium">Betreff</th>
+                        <th class="px-3 py-2.5 font-medium">Empfänger</th>
+                        <th class="px-3 py-2.5 font-medium">Mail-Klasse</th>
+                        <th class="px-3 py-2.5 font-medium">Versandkanal</th>
+                        <th class="px-3 py-2.5 text-right font-medium" title="Anzahl Sendungen">× <span class="font-normal lowercase">Sendungen</span></th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-zinc-100">

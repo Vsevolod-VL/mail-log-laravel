@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Phattarachai\MailLogLaravel\Http\Controllers;
+namespace VsevolodVL\MailLogLaravel\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Phattarachai\MailLogLaravel\Models\MailLogGroup;
+use VsevolodVL\MailLogLaravel\Models\MailLogGroup;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 

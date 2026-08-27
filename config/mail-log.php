@@ -1,7 +1,7 @@
 <?php
 
 declare(strict_types=1);
-use Phattarachai\MailLogLaravel\Http\Middleware\Authorize;
+use VsevolodVL\MailLogLaravel\Http\Middleware\Authorize;
 
 return [
     'enabled' => env('MAIL_LOG_ENABLED', default: true),

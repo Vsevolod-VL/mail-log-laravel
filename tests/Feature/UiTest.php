@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Storage;
-use Phattarachai\MailLogLaravel\Enums\MailLogStatus;
-use Phattarachai\MailLogLaravel\Mail\TestMail;
-use Phattarachai\MailLogLaravel\MailLog;
-use Phattarachai\MailLogLaravel\Models\MailLog as MailLogEvent;
-use Phattarachai\MailLogLaravel\Models\MailLogGroup;
+use VsevolodVL\MailLogLaravel\Enums\MailLogStatus;
+use VsevolodVL\MailLogLaravel\Mail\TestMail;
+use VsevolodVL\MailLogLaravel\MailLog;
+use VsevolodVL\MailLogLaravel\Models\MailLog as MailLogEvent;
+use VsevolodVL\MailLogLaravel\Models\MailLogGroup;
 
 beforeEach(function (): void {
     Relation::morphMap([], merge: false);
@@ -41,7 +41,7 @@ it('lists groups on the index with sent-count and recipient summary', function (
         ->assertSee('Order #1042 shipped')
         ->assertSee('OrderShipped')
         ->assertSee('smtp')
-        ->assertSee('+2 more');
+        ->assertSee('+2 weitere');
 });
 
 it('filters the index by status', function (): void {
@@ -117,7 +117,7 @@ it('shows the body preview iframe and sends table on the group detail page', fun
 
     $response->assertOk()
         ->assertSee('Order #1042 shipped')
-        ->assertSee('Sends (2)')
+        ->assertSee('Sendungen (2)')
         ->assertSee('a@example.com')
         ->assertSee('b@example.com')
         ->assertSee('App\\Mail\\OrderShipped', escape: false)
@@ -227,7 +227,7 @@ it('renders the header back-link when back_link config has a url but no label ke
     $this->get(route('mail-log.index'))
         ->assertOk()
         ->assertSee('https://app.example.com')
-        ->assertSee('Back');
+        ->assertSee('Zurück');
 });
 
 it('inlines the dist CSS + JS bundles via the asset helpers', function (): void {

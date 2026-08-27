@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Phattarachai\MailLogLaravel\Support;
+namespace VsevolodVL\MailLogLaravel\Support;
 
 final readonly class EnvWriter
 {

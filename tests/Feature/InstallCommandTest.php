@@ -66,7 +66,7 @@ it('prints the AppServiceProvider auth gate + HasMailLog trait snippets', functi
         ->expectsConfirmation('Run `php artisan migrate` now?', 'no')
         ->expectsOutputToContain('MailLogGroup::registerMorphMap();')
         ->expectsOutputToContain('MailLog::auth(function ($request)')
-        ->expectsOutputToContain('use Phattarachai\\MailLogLaravel\\Concerns\\HasMailLog;')
+        ->expectsOutputToContain('use VsevolodVL\\MailLogLaravel\\Concerns\\HasMailLog;')
         ->expectsOutputToContain('protected function mailLogModel()')
         ->expectsOutputToContain('return $this->withMailLog(new Headers())')
         ->expectsOutputToContain('model:prune')

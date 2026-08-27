@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
-use Phattarachai\MailLogLaravel\Http\Controllers\AttachmentController;
-use Phattarachai\MailLogLaravel\Http\Controllers\EventController;
-use Phattarachai\MailLogLaravel\Http\Controllers\GroupController;
-use Phattarachai\MailLogLaravel\Http\Controllers\TestSendController;
+use VsevolodVL\MailLogLaravel\Http\Controllers\AttachmentController;
+use VsevolodVL\MailLogLaravel\Http\Controllers\EventController;
+use VsevolodVL\MailLogLaravel\Http\Controllers\GroupController;
+use VsevolodVL\MailLogLaravel\Http\Controllers\TestSendController;
 
 Route::prefix((string) config('mail-log.ui.path', 'mail-log'))
     ->middleware(config('mail-log.ui.middleware', ['web']))

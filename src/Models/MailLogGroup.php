@@ -2,8 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Phattarachai\MailLogLaravel\Models;
+namespace VsevolodVL\MailLogLaravel\Models;
 
+use VsevolodVL\MailLogLaravel\Enums\MailLogStatus;
+use VsevolodVL\MailLogLaravel\Database\Factories\MailLogGroupFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -15,9 +17,6 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use Override;
-use Phattarachai\MailLogLaravel\Database\Factories\MailLogGroupFactory;
-use Phattarachai\MailLogLaravel\Enums\MailLogStatus;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
@@ -29,10 +28,18 @@ class MailLogGroup extends Model implements HasMedia
 
     protected $guarded = [];
 
-    #[Override]
     public function getTable(): string
     {
         return (string) config('mail-log.tables.groups', 'mail_log_groups');
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'latest_status' => MailLogStatus::class,
+            'sent_count' => 'integer',
+            'failed_count' => 'integer',
+        ];
     }
 
     /**
@@ -56,7 +63,8 @@ class MailLogGroup extends Model implements HasMedia
      */
     public function model(): MorphTo
     {
-        return $this->morphTo();
+//        return $this->morphTo();
+        return $this->hasMany(MailLog::class, 'group_id');
     }
 
     /**
@@ -97,10 +105,13 @@ class MailLogGroup extends Model implements HasMedia
      */
     public function uniqueRecipients(): Collection
     {
-        return $this->events()
-            ->get(['to'])
-            ->pluck('to')
-            ->flatten(1)
+        return  $this->events()
+            ->get(['to', 'cc', 'bcc'])
+            ->flatMap(static fn (MailLog $event) => array_merge(
+                $event->to ?? [],
+                $event->cc ?? [],
+                $event->bcc ?? [],
+            ))
             ->unique()
             ->values();
     }
@@ -144,18 +155,9 @@ class MailLogGroup extends Model implements HasMedia
         ]);
     }
 
-    #[Override]
-    protected function casts(): array
-    {
-        return [
-            'latest_status' => MailLogStatus::class,
-            'sent_count' => 'integer',
-            'failed_count' => 'integer',
-        ];
-    }
-
     protected static function newFactory(): Factory
     {
         return MailLogGroupFactory::new();
     }
 }
+

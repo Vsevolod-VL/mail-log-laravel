@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Phattarachai\MailLogLaravel\Tests;
+namespace VsevolodVL\MailLogLaravel\Tests;
 
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Orchestra\Testbench\TestCase as BaseTestCase;
-use Phattarachai\MailLogLaravel\MailLog;
-use Phattarachai\MailLogLaravel\MailLogServiceProvider;
+use VsevolodVL\MailLogLaravel\MailLog;
+use VsevolodVL\MailLogLaravel\MailLogServiceProvider;
 use Spatie\MediaLibrary\MediaLibraryServiceProvider;
 
 abstract class TestCase extends BaseTestCase

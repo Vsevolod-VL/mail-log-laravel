@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Phattarachai\MailLogLaravel;
+namespace VsevolodVL\MailLogLaravel;
 
 use Illuminate\Mail\Events\MessageSending;
 use Illuminate\Mail\Events\MessageSent;
@@ -11,9 +11,9 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 use Override;
-use Phattarachai\MailLogLaravel\Console\InstallCommand;
-use Phattarachai\MailLogLaravel\Listeners\LogOutgoingMail;
-use Phattarachai\MailLogLaravel\Support\Fingerprinter;
+use VsevolodVL\MailLogLaravel\Console\InstallCommand;
+use VsevolodVL\MailLogLaravel\Listeners\LogOutgoingMail;
+use VsevolodVL\MailLogLaravel\Support\Fingerprinter;
 
 class MailLogServiceProvider extends ServiceProvider
 {

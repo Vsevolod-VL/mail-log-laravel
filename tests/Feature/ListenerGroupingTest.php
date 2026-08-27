@@ -11,10 +11,10 @@ use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Mail\Mailables\Headers;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
-use Phattarachai\MailLogLaravel\Concerns\HasMailLog;
-use Phattarachai\MailLogLaravel\Enums\MailLogStatus;
-use Phattarachai\MailLogLaravel\Models\MailLog;
-use Phattarachai\MailLogLaravel\Models\MailLogGroup;
+use VsevolodVL\MailLogLaravel\Concerns\HasMailLog;
+use VsevolodVL\MailLogLaravel\Enums\MailLogStatus;
+use VsevolodVL\MailLogLaravel\Models\MailLog;
+use VsevolodVL\MailLogLaravel\Models\MailLogGroup;
 
 beforeEach(function (): void {
     Relation::morphMap([], merge: false);
