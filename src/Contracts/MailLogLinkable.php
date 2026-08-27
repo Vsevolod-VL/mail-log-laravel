@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Phattarachai\MailLogLaravel\Contracts;
+namespace VsevolodVL\MailLogLaravel\Contracts;
 
 /**
  * Optional contract for Eloquent models attached to a MailLogGroup. Implement

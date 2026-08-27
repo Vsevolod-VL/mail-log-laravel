@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Phattarachai\MailLogLaravel\Enums\MailLogStatus;
+use VsevolodVL\MailLogLaravel\Enums\MailLogStatus;
 
 it('exposes pending / sent / failed cases', function (): void {
     expect(MailLogStatus::Pending->value)->toBe('pending')

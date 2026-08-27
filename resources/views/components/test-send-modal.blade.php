@@ -10,7 +10,7 @@
         class="ml-1 inline-flex items-center gap-1.5 rounded-md bg-zinc-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-zinc-800"
     >
         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5"/></svg>
-        Test send
+        Test-E-Mail senden
     </button>
 
     <div x-show="open" class="fixed inset-0 z-50 flex items-center justify-center bg-zinc-900/40 px-4">
@@ -27,8 +27,8 @@
                 @csrf
 
                 <div>
-                    <h2 class="text-base font-semibold text-zinc-900">ทดสอบส่งอีเมล</h2>
-                    <p class="mt-1 text-xs text-zinc-500">ส่งอีเมลทดสอบจากแอปพลิเคชัน แล้วดูผลลัพธ์ในกลุ่มของ Mail Log</p>
+                    <h2 class="text-base font-semibold text-zinc-900">Test-E-Mail-Versand</h2>
+                    <p class="mt-1 text-xs text-zinc-500">Senden Sie eine Test-E-Mail aus der Anwendung und sehen Sie sich die Ergebnisse im Bereich „Mail-Protokoll“ an.</p>
                 </div>
 
                 @if ($errors->any())
@@ -40,7 +40,7 @@
                 @endif
 
                 <div>
-                    <label for="mail-log-test-email" class="block text-xs font-medium text-zinc-700">Recipient</label>
+                    <label for="mail-log-test-email" class="block text-xs font-medium text-zinc-700">Empfänger</label>
                     <input
                         x-ref="email"
                         id="mail-log-test-email"
@@ -54,18 +54,18 @@
                 </div>
 
                 <div>
-                    <label for="mail-log-test-message" class="block text-xs font-medium text-zinc-700">Message</label>
+                    <label for="mail-log-test-message" class="block text-xs font-medium text-zinc-700">Nachricht</label>
                     <textarea
                         id="mail-log-test-message"
                         name="message"
                         rows="3"
                         class="mt-1 block w-full rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm focus:border-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-100"
-                        placeholder="ข้อความที่ต้องการทดสอบ (เว้นว่างเพื่อใช้ค่าเริ่มต้น)"
+                        placeholder="Zu testender Text (leer lassen, um den Standardwert zu verwenden)"
                     >{{ old('message') }}</textarea>
                 </div>
 
                 <div>
-                    <label for="mail-log-test-attachments" class="block text-xs font-medium text-zinc-700">Attachments</label>
+                    <label for="mail-log-test-attachments" class="block text-xs font-medium text-zinc-700">Anhänge</label>
                     <input
                         id="mail-log-test-attachments"
                         type="file"
@@ -76,9 +76,9 @@
                 </div>
 
                 <div class="flex items-center justify-end gap-2 pt-1">
-                    <button type="button" @click="hide()" class="rounded-md px-3 py-1.5 text-xs font-medium text-zinc-600 hover:bg-zinc-100">ยกเลิก</button>
+                    <button type="button" @click="hide()" class="rounded-md px-3 py-1.5 text-xs font-medium text-zinc-600 hover:bg-zinc-100">Abbrechen</button>
                     <button type="submit" class="inline-flex items-center gap-1.5 rounded-md bg-zinc-900 px-3 py-1.5 text-xs font-medium text-white hover:bg-zinc-800">
-                        ส่งอีเมลทดสอบ
+                        Senden
                     </button>
                 </div>
             </form>

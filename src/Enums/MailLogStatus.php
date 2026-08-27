@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Phattarachai\MailLogLaravel\Enums;
+namespace VsevolodVL\MailLogLaravel\Enums;
 
 enum MailLogStatus: string
 {
@@ -32,3 +32,4 @@ enum MailLogStatus: string
         };
     }
 }
+

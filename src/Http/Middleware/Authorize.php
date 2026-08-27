@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Phattarachai\MailLogLaravel\Http\Middleware;
+namespace VsevolodVL\MailLogLaravel\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Phattarachai\MailLogLaravel\MailLog;
+use VsevolodVL\MailLogLaravel\MailLog;
 use Symfony\Component\HttpFoundation\Response;
 
 class Authorize

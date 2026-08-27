@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Phattarachai\MailLogLaravel\Http\Controllers;
+namespace VsevolodVL\MailLogLaravel\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Phattarachai\MailLogLaravel\Models\MailLog;
-use Phattarachai\MailLogLaravel\Models\MailLogGroup;
+use VsevolodVL\MailLogLaravel\Models\MailLog;
+use VsevolodVL\MailLogLaravel\Models\MailLogGroup;
 
 class EventController
 {

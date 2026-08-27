@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Phattarachai\MailLogLaravel\Console;
+namespace VsevolodVL\MailLogLaravel\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Schema;
-use Phattarachai\MailLogLaravel\Support\EnvWriter;
+use VsevolodVL\MailLogLaravel\Support\EnvWriter;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class InstallCommand extends Command
@@ -152,8 +152,8 @@ class InstallCommand extends Command
     {
         $this->writeRawHeader('Add to AppServiceProvider::boot() — registers the dashboard auth gate + a stable morph alias:');
         $this->writeRawSnippet(<<<'PHP'
-            use Phattarachai\MailLogLaravel\MailLog;
-            use Phattarachai\MailLogLaravel\Models\MailLogGroup;
+            use VsevolodVL\MailLogLaravel\MailLog;
+            use VsevolodVL\MailLogLaravel\Models\MailLogGroup;
 
             MailLogGroup::registerMorphMap();
             MailLog::auth(function ($request) {
@@ -165,7 +165,7 @@ class InstallCommand extends Command
         $this->writeRawSnippet(<<<'PHP'
             use Illuminate\Mail\Mailable;
             use Illuminate\Mail\Mailables\Headers;
-            use Phattarachai\MailLogLaravel\Concerns\HasMailLog;
+            use VsevolodVL\MailLogLaravel\Concerns\HasMailLog;
 
             class OrderShippedMail extends Mailable
             {
@@ -193,7 +193,7 @@ class InstallCommand extends Command
         $this->writeRawSnippet(<<<'PHP'
             // bootstrap/app.php (Laravel 11+) — inside ->withSchedule(function (Schedule $schedule) { ... }):
             $schedule->command('model:prune', [
-                '--model' => [\Phattarachai\MailLogLaravel\Models\MailLogGroup::class],
+                '--model' => [\VsevolodVL\MailLogLaravel\Models\MailLogGroup::class],
             ])->daily();
             PHP);
     }

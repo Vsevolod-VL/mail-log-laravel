@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Phattarachai\MailLogLaravel\Listeners;
+namespace VsevolodVL\MailLogLaravel\Listeners;
 
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Mail\Events\MessageSending;
@@ -11,10 +11,10 @@ use Illuminate\Mail\SendQueuedMailable;
 use Illuminate\Queue\Events\JobFailed;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use Phattarachai\MailLogLaravel\Enums\MailLogStatus;
-use Phattarachai\MailLogLaravel\Models\MailLog;
-use Phattarachai\MailLogLaravel\Models\MailLogGroup;
-use Phattarachai\MailLogLaravel\Support\Fingerprinter;
+use VsevolodVL\MailLogLaravel\Enums\MailLogStatus;
+use VsevolodVL\MailLogLaravel\Models\MailLog;
+use VsevolodVL\MailLogLaravel\Models\MailLogGroup;
+use VsevolodVL\MailLogLaravel\Support\Fingerprinter;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Mime\Header\HeaderInterface;

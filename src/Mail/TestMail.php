@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Phattarachai\MailLogLaravel\Mail;
+namespace VsevolodVL\MailLogLaravel\Mail;
 
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Mail\Mailables\Headers;
-use Phattarachai\MailLogLaravel\Concerns\HasMailLog;
+use VsevolodVL\MailLogLaravel\Concerns\HasMailLog;
 
 class TestMail extends Mailable
 {

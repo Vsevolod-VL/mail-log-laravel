@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Phattarachai\MailLogLaravel\Database\Factories;
+namespace VsevolodVL\MailLogLaravel\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Phattarachai\MailLogLaravel\Enums\MailLogStatus;
-use Phattarachai\MailLogLaravel\Models\MailLogGroup;
+use VsevolodVL\MailLogLaravel\Enums\MailLogStatus;
+use VsevolodVL\MailLogLaravel\Models\MailLogGroup;
 
 /**
  * @extends Factory<MailLogGroup>

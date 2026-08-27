@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Phattarachai\MailLogLaravel\Http\Controllers;
+namespace VsevolodVL\MailLogLaravel\Http\Controllers;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
-use Phattarachai\MailLogLaravel\Mail\TestMail;
+use VsevolodVL\MailLogLaravel\Mail\TestMail;
 
 class TestSendController
 {

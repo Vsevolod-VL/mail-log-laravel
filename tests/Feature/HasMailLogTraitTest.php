@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Headers;
-use Phattarachai\MailLogLaravel\Concerns\HasMailLog;
-use Phattarachai\MailLogLaravel\Models\MailLogGroup;
+use VsevolodVL\MailLogLaravel\Concerns\HasMailLog;
+use VsevolodVL\MailLogLaravel\Models\MailLogGroup;
 
 beforeEach(function (): void {
     Relation::morphMap([], merge: false);

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Phattarachai\MailLogLaravel\Support\Fingerprinter;
+use VsevolodVL\MailLogLaravel\Support\Fingerprinter;
 use Symfony\Component\Mime\Email;
 
 /**

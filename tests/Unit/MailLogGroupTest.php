@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Schema;
-use Phattarachai\MailLogLaravel\Enums\MailLogStatus;
-use Phattarachai\MailLogLaravel\Models\MailLog;
-use Phattarachai\MailLogLaravel\Models\MailLogGroup;
+use VsevolodVL\MailLogLaravel\Enums\MailLogStatus;
+use VsevolodVL\MailLogLaravel\Models\MailLog;
+use VsevolodVL\MailLogLaravel\Models\MailLogGroup;
 
 it('creates a row from the factory with every expected column', function (): void {
     $group = MailLogGroup::factory()->create();

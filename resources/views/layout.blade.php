@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="de">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <title>{{ $title ?? config('mail-log.ui.brand', 'Mail Log') }} · {{ config('mail-log.ui.brand', 'Mail Log') }}</title>
+{{--    <script src="/js/dist/mail-log.js" />--}}
     <link rel="stylesheet" href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600|ibm-plex-sans-thai:400,500|jetbrains-mono:400,500" />
-    {{ \Phattarachai\MailLogLaravel\MailLog::css() }}
-    {{ \Phattarachai\MailLogLaravel\MailLog::js() }}
+    {{ \VsevolodVL\MailLogLaravel\MailLog::css() }}
+    {{ \VsevolodVL\MailLogLaravel\MailLog::js() }}
 </head>
 <body class="min-h-screen bg-white text-zinc-900 antialiased" x-data="mailLogShell()">
 
@@ -20,11 +21,11 @@
 <header class="border-b border-zinc-200 bg-white">
     <div class="mx-auto flex max-w-7xl items-center gap-4 px-6 py-3">
         @php($mailLogBackLink = config('mail-log.ui.back_link', []))
-        @php($mailLogBackUrlSetting = is_array($mailLogBackLink) ? ($mailLogBackLink['url'] ?? null) : null)
+        @php($mailLogBackUrlSetting = $mailLogBackLink['url'] ?? null)
         @if ($mailLogBackUrlSetting !== false)
             <a href="{{ $mailLogBackUrlSetting ?: url('/') }}" class="flex items-center gap-1.5 text-sm text-zinc-500 hover:text-zinc-900">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"/></svg>
-                <span>{{ ($mailLogBackLink['label'] ?? null) ?: 'Back' }}</span>
+                <span>{{ $mailLogBackLink['label'] ?? 'Zurück' }}</span>
             </a>
             <div class="h-5 w-px bg-zinc-200"></div>
         @endif
@@ -41,7 +42,7 @@
                 type="button"
                 @click="toggleTheme()"
                 class="grid h-8 w-8 place-items-center rounded-md text-zinc-500 hover:bg-zinc-100"
-                title="Toggle theme"
+                title="Design umschalten"
             >
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636"/><circle cx="12" cy="12" r="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
@@ -56,4 +57,6 @@
 @yield('content')
 
 </body>
+<script>
+</script>
 </html>

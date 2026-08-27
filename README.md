@@ -1,7 +1,7 @@
 # Mail Log
 
-[![Packagist Version](https://img.shields.io/packagist/v/phattarachai/mail-log-laravel.svg?style=flat-square)](https://packagist.org/packages/phattarachai/mail-log-laravel)
-[![License](https://img.shields.io/packagist/l/phattarachai/mail-log-laravel.svg?style=flat-square)](LICENSE.md)
+[![Packagist Version](https://img.shields.io/packagist/v/Vsevolod-VL/mail-log-laravel.svg?style=flat-square)](https://packagist.org/packages/Vsevolod-VL/mail-log-laravel)
+[![License](https://img.shields.io/packagist/l/Vsevolod-VL/mail-log-laravel.svg?style=flat-square)](LICENSE.md)
 
 Self-hosted outbound mail logger for Laravel. Captures every `Mail::send(...)` + Notification mail-channel call, groups identical sends together by Mailable class + Eloquent model, and exposes the result at a `/mail-log` dashboard. Ships its own Tailwind UI — no Filament, no Livewire-from-the-package, no `npm install` in the host.
 
@@ -16,7 +16,7 @@ Self-hosted outbound mail logger for Laravel. Captures every `Mail::send(...)` +
 ## Install
 
 ```bash
-composer require phattarachai/mail-log-laravel
+composer require Vsevolod-VL/mail-log-laravel
 php artisan mail-log:install
 ```
 
@@ -27,8 +27,8 @@ Re-run safely. Pass `--dry-run` to print intended changes without writing.
 After install, paste the auth gate snippet:
 
 ```php
-use Phattarachai\MailLogLaravel\MailLog;
-use Phattarachai\MailLogLaravel\Models\MailLogGroup;
+use Vsevolod-VL\MailLogLaravel\MailLog;
+use Vsevolod-VL\MailLogLaravel\Models\MailLogGroup;
 
 MailLogGroup::registerMorphMap();
 MailLog::auth(fn ($request) => $request->user()?->isAdmin() ?? false);
@@ -43,7 +43,7 @@ Drop the trait into a Mailable and tell it what model originated the send:
 ```php
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Headers;
-use Phattarachai\MailLogLaravel\Concerns\HasMailLog;
+use Vsevolod-VL\MailLogLaravel\Concerns\HasMailLog;
 
 class OrderShippedMail extends Mailable
 {
@@ -117,7 +117,7 @@ See [`config/mail-log.php`](config/mail-log.php) for the full schema; the [Boost
 ```php
 // bootstrap/app.php (Laravel 11+) — inside ->withSchedule(function (Schedule $schedule) { ... }):
 $schedule->command('model:prune', [
-    '--model' => [\Phattarachai\MailLogLaravel\Models\MailLogGroup::class],
+    '--model' => [\Vsevolod-VL\MailLogLaravel\Models\MailLogGroup::class],
 ])->daily();
 ```
 
@@ -131,7 +131,7 @@ Events cascade-delete via FK when their parent group is pruned.
 
 ## Credits
 
-Built by [Phattarachai Chaimongkol](https://github.com/phattarachai). Same shipping pattern as Laravel [Horizon](https://laravel.com/docs/horizon) and [Pulse](https://laravel.com/docs/pulse) — pre-built CSS + JS committed to `dist/`, inlined into the layout via `MailLog::css()` / `MailLog::js()` helpers, no host-side `npm install` required.
+Built by [Vsevolod-VL Chaimongkol](https://github.com/Vsevolod-VL). Same shipping pattern as Laravel [Horizon](https://laravel.com/docs/horizon) and [Pulse](https://laravel.com/docs/pulse) — pre-built CSS + JS committed to `dist/`, inlined into the layout via `MailLog::css()` / `MailLog::js()` helpers, no host-side `npm install` required.
 
 ## License
 
