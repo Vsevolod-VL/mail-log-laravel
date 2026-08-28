@@ -7,6 +7,7 @@ namespace VsevolodVL\MailLogLaravel\Http\Controllers;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
 use VsevolodVL\MailLogLaravel\Enums\MailLogStatus;
 use VsevolodVL\MailLogLaravel\Models\MailLog;
 use VsevolodVL\MailLogLaravel\Models\MailLogGroup;
@@ -69,7 +70,9 @@ class GroupController
 
     public function show(Request $request, MailLogGroup $group): View
     {
-        $group->load('media');
+        if (Schema::hasTable('media')) {
+            $group->load('media');
+        }
 
         $events = $group->events()
             ->paginate((int) config('mail-log.ui.page_size', 25))

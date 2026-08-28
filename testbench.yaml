@@ -20,7 +20,7 @@ migrations:
   - workbench/database/migrations
 
 seeders:
-  - Workbench\Database\Seeders\DatabaseSeeder
+  - Database\Seeders\DatabaseSeeder
 
 workbench:
   start: '/'

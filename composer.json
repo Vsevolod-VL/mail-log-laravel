@@ -47,6 +47,7 @@
         "psr-4": {
             "VsevolodVL\\MailLogLaravel\\Tests\\": "tests/",
             "VsevolodVL\\MailLogLaravel\\Database\\Seeders\\": "database/seeders/",
+            "Database\\Seeders\\": "workbench/database/seeders/",
             "Workbench\\App\\": "workbench/app/",
             "Workbench\\Database\\Factories\\": "workbench/database/factories/",
             "Workbench\\Database\\Seeders\\": "workbench/database/seeders/"

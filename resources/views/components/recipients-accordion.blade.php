@@ -17,9 +17,12 @@
         <p class="px-4 py-4 text-xs text-zinc-400">Noch keine Empfänger erfasst.</p>
     @else
         <ul class="max-h-64 divide-y divide-zinc-100 overflow-y-auto text-sm">
-            @foreach ($recipients as $recipient)
-                <li class="flex items-center justify-between gap-2 px-4 py-1.5">
-                    <span class="truncate text-zinc-700">{{ $recipient }}</span>
+            @foreach($group->model as $model)
+                <span><strong>TO: <span class="truncate text-zinc-700">{{ json_encode($model->to) }}</span></strong></span>
+
+                <li class="flex flex-col text-left items-left justify-between gap-2 px-4 py-1.5">
+                        <div>cc: <span class="truncate text-zinc-700">{{ json_encode($model->cc) }}</span></div>
+                        <div>bcc: <span class="truncate text-zinc-700">{{ json_encode($model->bcc) }}</span></div>
                 </li>
             @endforeach
         </ul>

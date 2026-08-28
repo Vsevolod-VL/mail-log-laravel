@@ -1,6 +1,6 @@
 <?php
 
-namespace Workbench\Database\Seeders;
+namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use VsevolodVL\MailLogLaravel\Models\MailLogGroup;
@@ -34,9 +34,9 @@ class DatabaseSeeder extends Seeder
         for ($i = 1; $i <= 5; $i++) {
             MailLog::create([
                 'group_id' => $group1->id,
-                'to' => json_encode(['customer' . $i . '@example.com']),
-                'cc' => json_encode(['cc@shop.de']),
-                'bcc' => json_encode(['archive@shop.de']),
+                'to' => ['customer' . $i . '@example.com'],
+                'cc' => ['cc@shop.de'],
+                'bcc' => ['archive@shop.de'],
                 'status' => 'sent',
                 'seconds' => 0.5,
             ]);
@@ -60,21 +60,21 @@ class DatabaseSeeder extends Seeder
 
         MailLog::create([
             'group_id' => $group2->id,
-            'to' => json_encode(['user@example.com']),
+            'to' => ['user@example.com'],
             'status' => 'sent',
             'seconds' => 0.3,
         ]);
 
         MailLog::create([
             'group_id' => $group2->id,
-            'to' => json_encode(['user2@example.com']),
+            'to' => ['user2@example.com'],
             'status' => 'sent',
             'seconds' => 0.4,
         ]);
 
         MailLog::create([
             'group_id' => $group2->id,
-            'to' => json_encode(['user3@example.com']),
+            'to' => ['user3@example.com'],
             'status' => 'failed',
             'error_message' => 'SMTP Error: Invalid recipient address',
         ]);
@@ -95,7 +95,7 @@ class DatabaseSeeder extends Seeder
 
         MailLog::create([
             'group_id' => $group3->id,
-            'to' => json_encode(['subscriber1@example.com', 'subscriber2@example.com', 'subscriber3@example.com']),
+            'to' => ['subscriber1@example.com', 'subscriber2@example.com', 'subscriber3@example.com'],
             'status' => 'sent',
             'seconds' => 0.6,
         ]);
@@ -118,7 +118,7 @@ class DatabaseSeeder extends Seeder
 
         MailLog::create([
             'group_id' => $group4->id,
-            'to' => json_encode(['admin@beispiel.de']),
+            'to' => ['admin@beispiel.de'],
             'status' => 'pending',
         ]);
 
@@ -141,8 +141,9 @@ class DatabaseSeeder extends Seeder
         for ($i = 0; $i < 3; $i++) {
             MailLog::create([
                 'group_id' => $group5->id,
-                'to' => json_encode(['customer@example.com']),
-                'cc' => json_encode(['accounting@beispiel.de', 'archive@beispiel.de']),
+                'to' => ['customer@example.com'],
+                'cc' => ['accounting@beispiel.de', 'archive@beispiel.de'],
+                'bcc' => [],
                 'status' => 'sent',
                 'seconds' => 0.7,
             ]);
@@ -166,28 +167,36 @@ class DatabaseSeeder extends Seeder
 
         MailLog::create([
             'group_id' => $group6->id,
-            'to' => json_encode(['newuser@example.com']),
+            'to' => ['newuser@example.com'],
+            'cc' => [],
+            'bcc' => [],
             'status' => 'sent',
             'seconds' => 0.2,
         ]);
 
         MailLog::create([
             'group_id' => $group6->id,
-            'to' => json_encode(['newuser2@example.com']),
+            'to' => ['newuser2@example.com'],
+            'cc' => [],
+            'bcc' => [],
             'status' => 'sent',
             'seconds' => 0.2,
         ]);
 
         MailLog::create([
             'group_id' => $group6->id,
-            'to' => json_encode(['invalid@example.com']),
+            'to' => ['invalid@example.com'],
+            'cc' => [],
+            'bcc' => [],
             'status' => 'failed',
             'error_message' => 'Bounced: User unknown',
         ]);
 
         MailLog::create([
             'group_id' => $group6->id,
-            'to' => json_encode(['blocked@example.com']),
+            'to' => ['blocked@example.com'],
+            'cc' => [],
+            'bcc' => [],
             'status' => 'failed',
             'error_message' => 'SMTP: Relay access denied',
         ]);

@@ -61,7 +61,7 @@ class MailLogGroup extends Model implements HasMedia
     /**
      * @return MorphTo<Model, $this>
      */
-    public function model(): MorphTo
+    public function model()
     {
 //        return $this->morphTo();
         return $this->hasMany(MailLog::class, 'group_id');

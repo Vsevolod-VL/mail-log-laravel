@@ -25,8 +25,8 @@ class MailLog
     ];
 
     /**
-     * Format a date as `19 พ.ค. 67 · 14:34` (day + Thai abbrev + 2-digit Buddhist
-     * year + 24-hour time). Hard-coded to Thai for v0.1 (see design-notes.md).
+     * Format a date as `19 Mai 67 at 14:34` (day + month name + 2-digit Buddhist
+     * year + 24-hour time).
      */
     public static function dt(?CarbonInterface $date): string
     {
@@ -132,4 +132,3 @@ class MailLog
         return (string) file_get_contents($path);
     }
 }
-
