@@ -16,7 +16,7 @@
         }
     ],
     "require": {
-        "php": "^8.4",
+        "php": ">=8.3",
         "illuminate/console": "^12.0 || ^13.0",
         "illuminate/contracts": "^12.0 || ^13.0",
         "illuminate/database": "^12.0 || ^13.0",
@@ -32,6 +32,7 @@
         "driftingly/rector-laravel": "^2.5",
         "laravel/pint": "^1.29",
         "orchestra/testbench": "^10.0",
+        "orchestra/workbench": "^10.0",
         "pestphp/pest": "^4.0",
         "pestphp/pest-plugin-laravel": "^4.0",
         "rector/rector": "^2.5"
@@ -44,18 +45,45 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "VsevolodVL\\MailLogLaravel\\Tests\\": "tests/"
+            "VsevolodVL\\MailLogLaravel\\Tests\\": "tests/",
+            "VsevolodVL\\MailLogLaravel\\Database\\Seeders\\": "database/seeders/",
+            "Workbench\\App\\": "workbench/app/",
+            "Workbench\\Database\\Factories\\": "workbench/database/factories/",
+            "Workbench\\Database\\Seeders\\": "workbench/database/seeders/"
         }
     },
     "scripts": {
         "test": "vendor/bin/pest",
         "refactor": "vendor/bin/rector process",
-        "lint": "vendor/bin/pint"
+        "lint": "vendor/bin/pint",
+        "post-autoload-dump": [
+            "@clear",
+            "@prepare"
+        ],
+        "clear": "@php vendor/bin/testbench package:purge-skeleton --ansi",
+        "prepare": "@php vendor/bin/testbench package:discover --ansi",
+        "build": "@php vendor/bin/testbench workbench:build --ansi",
+        "serve": [
+            "Composer\\Config::disableProcessTimeout",
+            "@build",
+            "@php vendor/bin/testbench serve --ansi"
+        ]
     },
     "extra": {
         "laravel": {
             "providers": [
                 "VsevolodVL\\MailLogLaravel\\MailLogServiceProvider"
+            ]
+        },
+        "workbench": {
+            "start": "/mail-log",
+            "install": true,
+            "providers": [
+                "VsevolodVL\\MailLogLaravel\\MailLogServiceProvider"
+            ],
+            "dont-discover": [],
+            "seeders": [
+                "VsevolodVL\\MailLogLaravel\\Database\\Seeders\\MailLogDemoSeeder"
             ]
         }
     },

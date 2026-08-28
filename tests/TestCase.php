@@ -47,13 +47,8 @@ abstract class TestCase extends BaseTestCase
     {
         $app['config']->set('app.debug', false);
         $app['config']->set('app.key', 'base64:'.base64_encode(random_bytes(32)));
-        $app['config']->set('database.default', 'testing');
-        $app['config']->set('database.connections.testing', [
-            'driver' => 'sqlite',
-            'database' => ':memory:',
-            'prefix' => '',
-            'foreign_key_constraints' => true,
-        ]);
+        $app['config']->set('database.default', 'mysql');
+        $app['config']->set('database.connections.testing', $app['config']->get('database.connections.mysql'));
         $app['config']->set('mail-log.enabled', true);
         $app['config']->set('mail-log.ui.path', 'mail-log');
     }

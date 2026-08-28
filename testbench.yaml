@@ -1,0 +1,45 @@
+laravel: '@testbench'
+
+env:
+  MAIL_LOG_ENABLED: 'true'
+  MAIL_LOG_UI_PATH: 'mail-log'
+  MAIL_LOG_TEST_SEND_ENABLED: 'true'
+  DB_CONNECTION: mysql
+  DB_HOST: mysql
+  DB_PORT: '3306'
+  DB_DATABASE: mail_log
+  DB_USERNAME: mail_log
+  DB_PASSWORD: mail_log
+
+providers:
+  - VsevolodVL\MailLogLaravel\MailLogServiceProvider
+  - Workbench\App\Providers\WorkbenchServiceProvider
+
+migrations:
+  - database/migrations
+  - workbench/database/migrations
+
+seeders:
+  - Workbench\Database\Seeders\DatabaseSeeder
+
+workbench:
+  start: '/'
+  install: true
+  health: false
+  discovers:
+    web: true
+    api: true
+    commands: true
+    components: false
+    factories: true
+    views: false
+  build:
+    - asset-publish
+    - db-wipe
+    - migrate-fresh
+  assets:
+    - laravel-assets
+  sync:
+    - from: storage
+      to: workbench/storage
+      reverse: true

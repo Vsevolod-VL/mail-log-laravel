@@ -20,7 +20,11 @@
     </source>
     <php>
         <env name="APP_ENV" value="testing"/>
-        <env name="DB_CONNECTION" value="sqlite"/>
-        <env name="DB_DATABASE" value=":memory:"/>
+        <env name="DB_CONNECTION" value="mysql"/>
+        <env name="DB_HOST" value="mysql"/>
+        <env name="DB_PORT" value="3306"/>
+        <env name="DB_DATABASE" value="mail_log"/>
+        <env name="DB_USERNAME" value="mail_log"/>
+        <env name="DB_PASSWORD" value="mail_log"/>
     </php>
 </phpunit>
